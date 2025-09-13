@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #0d0d1a;
+            color: #e0e0f0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 900px;
+            width: 100%;
+            padding: 2rem;
+            background: rgba(18, 18, 30, 0.8);
+            border: 2px solid #2a2a4c;
+            border-radius: 1rem;
+            box-shadow: 0 0 40px rgba(78, 78, 128, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #7272a2;
+            text-align: center;
+            font-size: 2.5rem;
+            text-shadow: 0 0 15px rgba(114, 114, 162, 0.6);
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            background: #18182c;
+            border: 1px solid #2a2a4c;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .section:hover {
+            border-color: #4e4e7a;
+            box-shadow: 0 0 20px rgba(78, 78, 128, 0.4);
+        }
+
+        .ships-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .ship-card {
+            background: #111122;
+            border: 1px solid #33334c;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .ship-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: #6a6a99;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .ship-card.unlocked {
+            border-color: #2a6f8b;
+            box-shadow: 0 0 10px rgba(42, 111, 139, 0.5);
+        }
+
+        .ship-card .icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .ship-card .lock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .ship-card.unlocked .lock-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .unlock-button {
+            background: linear-gradient(45deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            cursor: pointer;
+            border: none;
+            text-align: center;
+        }
+
+        .unlock-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #2a2a4c;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1e40af, #3b82f6);
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container">
+        <div class="text-center mb-6">
+            <h1 class="text-4xl font-bold">Starship Hangar</h1>
+            <p class="text-sm text-gray-400">Expand your fleet by unlocking new ships!</p>
+            <p id="user-id" class="mt-2 text-xs text-gray-500"></p>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="section">
+            <h2 class="text-xl font-bold mb-2 text-blue-300">Your Progress</h2>
+            <div class="text-lg">
+                <p>Ships Unlocked: <span id="ships-unlocked-count">0</span> / <span id="total-ships-count">0</span></p>
+                <div class="progress-bar">
+                    <div id="progress-indicator" class="progress" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hangar Section -->
+        <div class="section">
+            <h2 class="text-xl font-bold mb-4 text-blue-300">Unlocked Ships</h2>
+            <div id="ships-grid" class="ships-grid">
+                <!-- Ship cards will be populated here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Unlock Button Section -->
+        <div class="section text-center">
+            <h2 class="text-xl font-bold mb-2 text-blue-300">Unlock a New Ship</h2>
+            <p class="text-sm text-gray-400 mb-4">Click to unlock a random ship!</p>
+            <button id="unlock-btn" class="unlock-button w-full sm:w-auto">
+                Unlock
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, getDocs, collection, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase global variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase
+        let app, db, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            console.log("Firebase initialized successfully.");
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+        }
+
+        // DOM elements
+        const shipsGrid = document.getElementById('ships-grid');
+        const unlockBtn = document.getElementById('unlock-btn');
+        const shipsUnlockedCount = document.getElementById('ships-unlocked-count');
+        const totalShipsCount = document.getElementById('total-ships-count');
+        const progressIndicator = document.getElementById('progress-indicator');
+        const userIdDisplay = document.getElementById('user-id');
+
+        let allShips = [
+            { id: 'scout-1', name: 'Scout Ship', icon: '🚀' },
+            { id: 'miner-2', name: 'Miner Ship', icon: '⛏️' },
+            { id: 'cargo-3', name: 'Cargo Hauler', icon: '📦' },
+            { id: 'fighter-4', name: 'Fighter', icon: '⚔️' },
+            { id: 'cruiser-5', name: 'Cruiser', icon: '🛰️' },
+            { id: 'dreadnought-6', name: 'Dreadnought', icon: '🛸' },
+            { id: 'carrier-7', name: 'Carrier', icon: '🌌' },
+            { id: 'mothership-8', name: 'Mothership', icon: '🚀' },
+        ];
+
+        let unlockedShips = [];
+        let userId = null;
+
+        /**
+         * Renders the ship cards to the UI.
+         */
+        const renderShips = () => {
+            shipsGrid.innerHTML = '';
+            totalShipsCount.textContent = allShips.length;
+            shipsUnlockedCount.textContent = unlockedShips.length;
+            const progress = (unlockedShips.length / allShips.length) * 100;
+            progressIndicator.style.width = `${progress}%`;
+
+            allShips.forEach(ship => {
+                const isUnlocked = unlockedShips.some(unlocked => unlocked.id === ship.id);
+                const shipCard = document.createElement('div');
+                shipCard.className = `ship-card ${isUnlocked ? 'unlocked' : ''} transition-all duration-200`;
+                shipCard.innerHTML = `
+                    <div class="icon">${ship.icon}</div>
+                    <div class="text-sm font-bold text-gray-300">${ship.name}</div>
+                    ${!isUnlocked ? '<div class="lock-overlay"><span class="text-3xl text-gray-400">🔒</span></div>' : ''}
+                `;
+                shipsGrid.appendChild(shipCard);
+            });
+        };
+
+        /**
+         * Loads the unlocked ships from Firestore for the current user.
+         */
+        const loadUnlockedShips = async () => {
+            if (!userId) {
+                console.error("User not authenticated. Cannot load ships.");
+                return;
+            }
+
+            try {
+                console.log("Attempting to load unlocked ships for user:", userId);
+                const shipsDocRef = doc(db, `/artifacts/${appId}/users/${userId}/data/unlocked_ships`);
+                const docSnap = await getDoc(shipsDocRef);
+
+                if (docSnap.exists()) {
+                    unlockedShips = docSnap.data().ships || [];
+                    console.log("Unlocked ships loaded:", unlockedShips);
+                } else {
+                    console.log("No unlocked ships found. Initializing new record.");
+                    unlockedShips = [];
+                    await setDoc(shipsDocRef, { ships: [] });
+                }
+                renderShips();
+            } catch (error) {
+                console.error("Error loading unlocked ships:", error);
+            }
+        };
+
+        /**
+         * Unlocks a random ship and saves it to Firestore.
+         */
+        const unlockRandomShip = async () => {
+            if (!userId) {
+                console.error("User not authenticated. Cannot unlock ship.");
+                return;
+            }
+
+            const lockedShips = allShips.filter(ship => !unlockedShips.some(unlocked => unlocked.id === ship.id));
+
+            if (lockedShips.length === 0) {
+                alert("You have unlocked all ships!");
+                return;
+            }
+
+            const shipToUnlock = lockedShips[Math.floor(Math.random() * lockedShips.length)];
+
+            try {
+                unlockedShips.push(shipToUnlock);
+                console.log(`Unlocking ship: ${shipToUnlock.name}`);
+                const shipsDocRef = doc(db, `/artifacts/${appId}/users/${userId}/data/unlocked_ships`);
+                await setDoc(shipsDocRef, { ships: unlockedShips });
+
+                renderShips();
+            } catch (error) {
+                console.error("Error unlocking ship:", error);
+            }
+        };
+
+        // --- Authentication and Initialization ---
+
+        // Listen for authentication state changes
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in.
+                userId = user.uid;
+                console.log("User authenticated:", userId);
+                userIdDisplay.textContent = `User ID: ${userId}`;
+                await loadUnlockedShips();
+            } else {
+                // User is signed out.
+                console.log("No user authenticated. Signing in.");
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Authentication failed:", error);
+                }
+            }
+        });
+
+        // Event listener for the unlock button
+        unlockBtn.addEventListener('click', unlockRandomShip);
+
+        // Initial render on load (with no ships)
+        renderShips();
+    </script>
+</body>
+</html>
