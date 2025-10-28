@@ -7,10 +7,10 @@
 <style>
     body {
         font-family: "Noto Sans Tamil", "Latha", sans-serif;
-        background-color: #E0F5F0;
-        color: #224444;
         margin: 0;
         padding: 0;
+        background-color: #E0F5F0;
+        color: #224444;
     }
     header {
         background-color: #008080;
@@ -19,16 +19,14 @@
         padding: 30px;
         font-size: 2.5em;
         font-weight: bold;
-        text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
-    section {
+    .slide {
+        display: none;
         padding: 40px;
-        margin: 20px auto;
-        width: 80%;
-        background-color: white;
-        border-radius: 15px;
-        box-shadow: 0px 4px 15px rgba(0,0,0,0.15);
         text-align: center;
+    }
+    .active {
+        display: block;
     }
     h2 {
         color: #006666;
@@ -37,20 +35,33 @@
         margin-bottom: 20px;
     }
     ul {
-        line-height: 1.8em;
-        font-size: 1.2em;
         list-style-type: "🌸 ";
+        font-size: 1.2em;
+        line-height: 1.8em;
         text-align: left;
         max-width: 800px;
-        margin: 0 auto;
+        margin: 0 auto 20px auto;
     }
     img {
-        display: block;
+        max-width: 100%;
+        height: auto;
         margin: 20px auto;
         border-radius: 10px;
         box-shadow: 0px 3px 12px rgba(0,0,0,0.2);
-        max-width: 100%;
-        height: auto;
+    }
+    .nav-buttons {
+        text-align: center;
+        margin: 20px;
+    }
+    .nav-buttons button {
+        background-color: #008080;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        margin: 0 10px;
+        font-size: 1em;
+        border-radius: 8px;
+        cursor: pointer;
     }
     footer {
         background-color: #008080;
@@ -58,7 +69,7 @@
         text-align: center;
         padding: 15px;
         font-size: 1em;
-        margin-top: 40px;
+        margin-top: 20px;
     }
 </style>
 </head>
@@ -66,7 +77,7 @@
 
 <header>திருவள்ளுவர் சிலை – கன்னியாகுமரி</header>
 
-<section>
+<div class="slide active">
     <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Thiruvalluvar_Statue_Kanyakumari.jpg" alt="Thiruvalluvar Statue">
     <h2>அறிமுகம்</h2>
     <ul>
@@ -75,9 +86,9 @@
         <li>கடல்சூழல் சூழ்ந்த இடத்தில் அமைந்துள்ளதால் இது ஒரு முக்கிய சுற்றுலா தலமாகும்.</li>
         <li>சிலை கிழக்கு திசையை நோக்கி அமைந்துள்ளது – அறிவொளியை குறிக்கிறது.</li>
     </ul>
-</section>
+</div>
 
-<section>
+<div class="slide">
     <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Thiruvalluvar_Statue_with_Vivekananda_Rock.jpg" alt="Thiruvalluvar Statue and Vivekananda Rock">
     <h2>கட்டுமானம்</h2>
     <ul>
@@ -87,9 +98,9 @@
         <li>133 அடி உயரம் – திருக்குறளின் 133 அதிகாரங்களை குறிக்கிறது.</li>
         <li>சுமார் 7,000 டன் எடை கொண்ட கிரானைட் கற்களால் ஆனது.</li>
     </ul>
-</section>
+</div>
 
-<section>
+<div class="slide">
     <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Kanyakumari_statues_and_monuments.jpg" alt="Kanyakumari View">
     <h2>வடிவமைப்பு & சிறப்பம்சம்</h2>
     <ul>
@@ -98,9 +109,9 @@
         <li>சிலை தமிழ் பண்பாட்டையும் தத்துவ சிந்தனையையும் பிரதிபலிக்கிறது.</li>
         <li>கடற்கரையில் அமைந்ததால் காலை சூரிய உதயத்துடன் மிளிர்கிறது.</li>
     </ul>
-</section>
+</div>
 
-<section>
+<div class="slide">
     <img src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Kanyakumari_thiruvalluvar_statue.jpg" alt="Thiruvalluvar Statue Close-up">
     <h2>அர்த்தம்</h2>
     <ul>
@@ -109,9 +120,9 @@
         <li>இவை மூன்றும் சேர்ந்து திருக்குறளின் மூன்று பொருள்களைக் குறிக்கின்றன.</li>
         <li>சிலையின் முகம் கிழக்கை நோக்கி இருப்பது அறிவையும் முன்னேற்றத்தையும் குறிக்கிறது.</li>
     </ul>
-</section>
+</div>
 
-<section>
+<div class="slide">
     <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Kanyakumari_view_of_statue.jpg" alt="Kanyakumari Sea View">
     <h2>முக்கியத்துவம்</h2>
     <ul>
@@ -120,9 +131,33 @@
         <li>விவேகானந்தர் பாறை நினைவிடத்துடன் இணைந்து ஆன்மிகம் மற்றும் கலாசாரத்தைக் காட்டுகிறது.</li>
         <li>உலகளவில் தமிழரின் பெருமையை வெளிப்படுத்துகிறது.</li>
     </ul>
-</section>
+</div>
+
+<div class="nav-buttons">
+    <button onclick="changeSlide(-1)">Previous</button>
+    <button onclick="changeSlide(1)">Next</button>
+</div>
 
 <footer>© 2025 தமிழின் பெருமை | திருவள்ளுவர் சிலை – கன்னியாகுமரி</footer>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        slide.classList.remove('active');
+        if(i === index) slide.classList.add('active');
+    });
+}
+
+function changeSlide(step) {
+    currentSlide += step;
+    if(currentSlide < 0) currentSlide = slides.length - 1;
+    if(currentSlide >= slides.length) currentSlide = 0;
+    showSlide(currentSlide);
+}
+</script>
 
 </body>
 </html>
