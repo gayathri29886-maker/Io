@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Platformer</title>
+    <title>Mario - Obstacles Added</title>
     <style>
         body { margin: 0; background: #5c94fc; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
         canvas { background: #5c94fc; border: 2px solid #000; }
@@ -17,7 +17,6 @@
         canvas.width = 800;
         canvas.height = 400;
 
-        // Game Constants
         const gravity = 0.5;
         const keys = { right: false, left: false, up: false };
 
@@ -28,47 +27,83 @@
                 this.position = { x: 100, y: 100 };
                 this.velocity = { x: 0, y: 0 };
             }
-
             draw() {
-                ctx.fillStyle = 'red'; // Mario color!
+                ctx.fillStyle = 'red';
                 ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
             }
-
             update() {
                 this.draw();
                 this.position.x += this.velocity.x;
                 this.position.y += this.velocity.y;
-
-                // Gravity Logic: v_y = v_y + g
                 if (this.position.y + this.height + this.velocity.y <= canvas.height) {
                     this.velocity.y += gravity;
                 } else {
-                    this.velocity.y = 0; // Stop falling when hitting bottom
+                    this.velocity.y = 0;
                 }
             }
         }
 
-        const mario = new Player();
+        class Obstacle {
+            constructor(x, speed) {
+                this.width = 30;
+                this.height = 30;
+                this.position = { x: x, y: canvas.height - 30 };
+                this.speed = speed;
+            }
+            draw() {
+                ctx.fillStyle = 'brown'; // Goomba-ish color
+                ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+            }
+            update() {
+                this.draw();
+                this.position.x -= this.speed; // Move toward the player
+            }
+        }
+
+        let mario = new Player();
+        let obstacles = [];
+
+        // Spawn a new obstacle every 2 seconds
+        setInterval(() => {
+            obstacles.push(new Obstacle(canvas.width, 3));
+        }, 2000);
 
         function animate() {
             requestAnimationFrame(animate);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Movement Logic
             mario.velocity.x = 0;
             if (keys.right) mario.velocity.x = 5;
             if (keys.left) mario.velocity.x = -5;
-
             mario.update();
+
+            obstacles.forEach((obstacle, index) => {
+                obstacle.update();
+
+                // 1. Collision Detection Logic
+                if (
+                    mario.position.x < obstacle.position.x + obstacle.width &&
+                    mario.position.x + mario.width > obstacle.position.x &&
+                    mario.position.y < obstacle.position.y + obstacle.height &&
+                    mario.position.y + mario.height > obstacle.position.y
+                ) {
+                    // Reset Game on Hit
+                    alert("Game Over! Try again.");
+                    obstacles = [];
+                    mario = new Player();
+                }
+
+                // 2. Remove obstacles that leave the screen
+                if (obstacle.position.x + obstacle.width < 0) {
+                    obstacles.splice(index, 1);
+                }
+            });
         }
 
-        // Input Listeners
         window.addEventListener('keydown', ({ keyCode }) => {
-            if (keyCode === 68) keys.right = true;  // 'D' key
-            if (keyCode === 65) keys.left = true;   // 'A' key
-            if (keyCode === 87 || keyCode === 32) { // 'W' or Space
-                if (mario.velocity.y === 0) mario.velocity.y = -15; // Jump
-            }
+            if (keyCode === 68) keys.right = true;
+            if (keyCode === 65) keys.left = true;
+            if ((keyCode === 87 || keyCode === 32) && mario.velocity.y === 0) mario.velocity.y = -12;
         });
 
         window.addEventListener('keyup', ({ keyCode }) => {
