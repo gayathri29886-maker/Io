@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mario - Scrolling Movement</title>
+    <title>Mario - Working Controls</title>
     <style>
-        body { margin: 0; background: #5c94fc; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        canvas { background: #5c94fc; border: 2px solid #000; }
+        body { margin: 0; background: #5c94fc; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; }
+        canvas { background: #5c94fc; border: 2px solid #000; cursor: pointer; }
+        .instructions { color: white; margin-bottom: 10px; text-shadow: 1px 1px 2px black; }
     </style>
 </head>
 <body>
+    <div class="instructions">Click the game area, then use <b>Arrow Keys</b> or <b>WASD</b> to move!</div>
     <canvas id="gameCanvas"></canvas>
 
     <script>
@@ -19,7 +21,7 @@
 
         const gravity = 0.5;
         const keys = { right: false, left: false };
-        let scrollOffset = 0; // Tracks how far we have moved in the level
+        let scrollOffset = 0;
 
         class Player {
             constructor() {
@@ -53,39 +55,36 @@
                 this.height = height;
             }
             draw() {
-                ctx.fillStyle = '#8B4513'; // Dirt/Brick color
+                ctx.fillStyle = '#8B4513';
                 ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
             }
         }
 
         const mario = new Player();
         const platforms = [
-            new Platform({ x: 0, y: 370, width: 2000, height: 30 }), // The Ground
-            new Platform({ x: 400, y: 250, width: 200, height: 20 }), // A floating platform
-            new Platform({ x: 700, y: 150, width: 200, height: 20 })
+            new Platform({ x: 0, y: 370, width: 5000, height: 30 }), // Long floor
+            new Platform({ x: 400, y: 250, width: 200, height: 20 }),
+            new Platform({ x: 800, y: 180, width: 200, height: 20 })
         ];
 
         function animate() {
             requestAnimationFrame(animate);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 1. Draw Platforms (and adjust for scroll)
             ctx.save();
-            ctx.translate(scrollOffset, 0); // Move everything based on scroll
+            ctx.translate(scrollOffset, 0);
             platforms.forEach(platform => platform.draw());
             ctx.restore();
 
             mario.update();
 
-            // 2. SCROLLING LOGIC
+            // Movement & Scrolling Logic
             if (keys.right && mario.position.x < 400) {
-                mario.velocity.x = mario.speed; // Move Mario right
+                mario.velocity.x = mario.speed;
             } else if (keys.left && mario.position.x > 100) {
-                mario.velocity.x = -mario.speed; // Move Mario left
+                mario.velocity.x = -mario.speed;
             } else {
                 mario.velocity.x = 0;
-
-                // If Mario is at the "scroll boundaries", move the world instead
                 if (keys.right) {
                     scrollOffset -= mario.speed;
                 } else if (keys.left && scrollOffset < 0) {
@@ -94,15 +93,36 @@
             }
         }
 
-        window.addEventListener('keydown', ({ keyCode }) => {
-            if (keyCode === 68) keys.right = true; // D
-            if (keyCode === 65) keys.left = true;  // A
-            if ((keyCode === 87 || keyCode === 32) && mario.velocity.y === 0) mario.velocity.y = -12;
+        // IMPROVED KEY LISTENERS
+        window.addEventListener('keydown', (event) => {
+            switch (event.code) {
+                case 'KeyA':
+                case 'ArrowLeft':
+                    keys.left = true;
+                    break;
+                case 'KeyD':
+                case 'ArrowRight':
+                    keys.right = true;
+                    break;
+                case 'KeyW':
+                case 'ArrowUp':
+                case 'Space':
+                    if (mario.velocity.y === 0) mario.velocity.y = -12;
+                    break;
+            }
         });
 
-        window.addEventListener('keyup', ({ keyCode }) => {
-            if (keyCode === 68) keys.right = false;
-            if (keyCode === 65) keys.left = false;
+        window.addEventListener('keyup', (event) => {
+            switch (event.code) {
+                case 'KeyA':
+                case 'ArrowLeft':
+                    keys.left = false;
+                    break;
+                case 'KeyD':
+                case 'ArrowRight':
+                    keys.right = false;
+                    break;
+            }
         });
 
         animate();
