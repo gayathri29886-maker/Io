@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mario - Obstacles Added</title>
+    <title>Mario - Scrolling Movement</title>
     <style>
         body { margin: 0; background: #5c94fc; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
         canvas { background: #5c94fc; border: 2px solid #000; }
@@ -18,7 +18,8 @@
         canvas.height = 400;
 
         const gravity = 0.5;
-        const keys = { right: false, left: false, up: false };
+        const keys = { right: false, left: false };
+        let scrollOffset = 0; // Tracks how far we have moved in the level
 
         class Player {
             constructor() {
@@ -26,6 +27,7 @@
                 this.height = 30;
                 this.position = { x: 100, y: 100 };
                 this.velocity = { x: 0, y: 0 };
+                this.speed = 5;
             }
             draw() {
                 ctx.fillStyle = 'red';
@@ -35,6 +37,7 @@
                 this.draw();
                 this.position.x += this.velocity.x;
                 this.position.y += this.velocity.y;
+
                 if (this.position.y + this.height + this.velocity.y <= canvas.height) {
                     this.velocity.y += gravity;
                 } else {
@@ -43,66 +46,57 @@
             }
         }
 
-        class Obstacle {
-            constructor(x, speed) {
-                this.width = 30;
-                this.height = 30;
-                this.position = { x: x, y: canvas.height - 30 };
-                this.speed = speed;
+        class Platform {
+            constructor({ x, y, width, height }) {
+                this.position = { x, y };
+                this.width = width;
+                this.height = height;
             }
             draw() {
-                ctx.fillStyle = 'brown'; // Goomba-ish color
+                ctx.fillStyle = '#8B4513'; // Dirt/Brick color
                 ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-            }
-            update() {
-                this.draw();
-                this.position.x -= this.speed; // Move toward the player
             }
         }
 
-        let mario = new Player();
-        let obstacles = [];
-
-        // Spawn a new obstacle every 2 seconds
-        setInterval(() => {
-            obstacles.push(new Obstacle(canvas.width, 3));
-        }, 2000);
+        const mario = new Player();
+        const platforms = [
+            new Platform({ x: 0, y: 370, width: 2000, height: 30 }), // The Ground
+            new Platform({ x: 400, y: 250, width: 200, height: 20 }), // A floating platform
+            new Platform({ x: 700, y: 150, width: 200, height: 20 })
+        ];
 
         function animate() {
             requestAnimationFrame(animate);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            mario.velocity.x = 0;
-            if (keys.right) mario.velocity.x = 5;
-            if (keys.left) mario.velocity.x = -5;
+            // 1. Draw Platforms (and adjust for scroll)
+            ctx.save();
+            ctx.translate(scrollOffset, 0); // Move everything based on scroll
+            platforms.forEach(platform => platform.draw());
+            ctx.restore();
+
             mario.update();
 
-            obstacles.forEach((obstacle, index) => {
-                obstacle.update();
+            // 2. SCROLLING LOGIC
+            if (keys.right && mario.position.x < 400) {
+                mario.velocity.x = mario.speed; // Move Mario right
+            } else if (keys.left && mario.position.x > 100) {
+                mario.velocity.x = -mario.speed; // Move Mario left
+            } else {
+                mario.velocity.x = 0;
 
-                // 1. Collision Detection Logic
-                if (
-                    mario.position.x < obstacle.position.x + obstacle.width &&
-                    mario.position.x + mario.width > obstacle.position.x &&
-                    mario.position.y < obstacle.position.y + obstacle.height &&
-                    mario.position.y + mario.height > obstacle.position.y
-                ) {
-                    // Reset Game on Hit
-                    alert("Game Over! Try again.");
-                    obstacles = [];
-                    mario = new Player();
+                // If Mario is at the "scroll boundaries", move the world instead
+                if (keys.right) {
+                    scrollOffset -= mario.speed;
+                } else if (keys.left && scrollOffset < 0) {
+                    scrollOffset += mario.speed;
                 }
-
-                // 2. Remove obstacles that leave the screen
-                if (obstacle.position.x + obstacle.width < 0) {
-                    obstacles.splice(index, 1);
-                }
-            });
+            }
         }
 
         window.addEventListener('keydown', ({ keyCode }) => {
-            if (keyCode === 68) keys.right = true;
-            if (keyCode === 65) keys.left = true;
+            if (keyCode === 68) keys.right = true; // D
+            if (keyCode === 65) keys.left = true;  // A
             if ((keyCode === 87 || keyCode === 32) && mario.velocity.y === 0) mario.velocity.y = -12;
         });
 
