@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Infinite Mario Clone</title>
+    <title>Fixed Mario Clone</title>
     <style>
-        body { margin: 0; background: #5c94fc; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: 'Courier New', Courier, monospace; }
-        canvas { background: #5c94fc; border: 4px solid #000; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .ui { position: absolute; top: 20px; color: white; font-size: 24px; text-shadow: 2px 2px #000; pointer-events: none; }
+        body { margin: 0; background: #5c94fc; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: 'Arial', sans-serif; }
+        canvas { background: #5c94fc; border: 4px solid #000; }
+        .ui { position: absolute; top: 20px; color: white; font-size: 24px; text-shadow: 2px 2px #000; }
     </style>
 </head>
 <body>
-    <div class="ui">Distance: <span id="score">0</span>m</div>
+    <div class="ui">Score: <span id="score">0</span></div>
     <canvas id="gameCanvas"></canvas>
 
     <script>
@@ -34,20 +34,15 @@
             }
 
             draw() {
-                // Drawing a simple "Block Mario"
-                // Hat
-                ctx.fillStyle = "#FF0000";
-                ctx.fillRect(this.position.x + 5, this.position.y, 20, 10);
-                // Face/Skin
-                ctx.fillStyle = "#FFCC99";
-                ctx.fillRect(this.position.x + 5, this.position.y + 10, 20, 10);
-                // Overalls
-                ctx.fillStyle = "#0000FF";
-                ctx.fillRect(this.position.x + 5, this.position.y + 20, 20, 15);
-                // Shoes
-                ctx.fillStyle = "#663300";
-                ctx.fillRect(this.position.x + 2, this.position.y + 35, 10, 5);
-                ctx.fillRect(this.position.x + 18, this.position.y + 35, 10, 5);
+                // Mario Body
+                ctx.fillStyle = "#FF0000"; // Hat/Shirt
+                ctx.fillRect(this.position.x, this.position.y, this.width, 15);
+                ctx.fillStyle = "#0000FF"; // Overalls
+                ctx.fillRect(this.position.x, this.position.y + 15, this.width, 20);
+                ctx.fillStyle = "#FFCC99"; // Face
+                ctx.fillRect(this.position.x + 10, this.position.y + 5, 15, 10);
+                ctx.fillStyle = "#000"; // Eyes
+                ctx.fillRect(this.position.x + 20, this.position.y + 7, 3, 3);
             }
 
             update() {
@@ -55,10 +50,11 @@
                 this.position.x += this.velocity.x;
                 this.position.y += this.velocity.y;
 
+                // Basic gravity
                 if (this.position.y + this.height + this.velocity.y <= canvas.height) {
                     this.velocity.y += gravity;
                 } else {
-                    // Fall into pit = Reset
+                    // Reset if falls off screen
                     this.reset();
                 }
             }
@@ -67,7 +63,13 @@
                 this.position = { x: 100, y: 100 };
                 this.velocity = { x: 0, y: 0 };
                 scrollOffset = 0;
-                platforms = [new Platform({ x: 0, y: 350, width: 600, height: 50 })];
+                score = 0;
+                document.getElementById('score').innerText = 0;
+                // Re-create starting ground
+                platforms = [
+                    new Platform({ x: 0, y: 350, width: 600, height: 50 }),
+                    new Platform({ x: 700, y: 250, width: 200, height: 20 })
+                ];
             }
         }
 
@@ -78,9 +80,9 @@
                 this.height = height;
             }
             draw() {
-                ctx.fillStyle = '#8B4513'; // Brown dirt
+                ctx.fillStyle = '#8B4513';
                 ctx.fillRect(this.position.x + scrollOffset, this.position.y, this.width, this.height);
-                ctx.fillStyle = '#228B22'; // Green grass top
+                ctx.fillStyle = '#228B22'; // Grass top
                 ctx.fillRect(this.position.x + scrollOffset, this.position.y, this.width, 10);
             }
         }
@@ -95,36 +97,36 @@
             requestAnimationFrame(animate);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 1. Draw and Manage Platforms
             platforms.forEach(platform => {
                 platform.draw();
 
-                // SOLID COLLISION LOGIC
+                // FIXED COLLISION LOGIC
                 if (
-                    mario.position.y + mario.height <= platform.y && 
-                    mario.position.y + mario.height + mario.velocity.y >= platform.y &&
-                    mario.position.x + mario.width >= platform.x + scrollOffset &&
-                    mario.position.x <= platform.x + scrollOffset + platform.width
+                    mario.position.y + mario.height <= platform.position.y && 
+                    mario.position.y + mario.height + mario.velocity.y >= platform.position.y &&
+                    mario.position.x + mario.width >= platform.position.x + scrollOffset &&
+                    mario.position.x <= platform.position.x + scrollOffset + platform.width
                 ) {
                     mario.velocity.y = 0;
+                    // Snap Mario to top of platform to prevent "jittering"
+                    mario.position.y = platform.position.y - mario.height;
                 }
             });
 
             mario.update();
 
-            // 2. INFINITE GENERATION LOGIC
-            // If the last platform is getting close to the screen, add a new one
+            // INFINITE GENERATION
             const lastPlatform = platforms[platforms.length - 1];
-            if (lastPlatform.position.x + scrollOffset < canvas.width) {
-                const newX = lastPlatform.position.x + lastPlatform.width + Math.random() * 150 + 50;
+            if (lastPlatform.position.x + scrollOffset < canvas.width + 200) {
+                const newX = lastPlatform.position.x + lastPlatform.width + (Math.random() * 100 + 50);
                 const newY = 150 + Math.random() * 200;
                 platforms.push(new Platform({ x: newX, y: newY, width: 150 + Math.random() * 200, height: 20 }));
             }
 
-            // Clean up old platforms to save memory
+            // Cleanup old platforms
             if (platforms.length > 20) platforms.shift();
 
-            // 3. MOVEMENT & SCROLLING
+            // MOVEMENT
             if (keys.right && mario.position.x < 400) {
                 mario.velocity.x = mario.speed;
             } else if (keys.left && mario.position.x > 100) {
@@ -141,7 +143,6 @@
             }
         }
 
-        // INPUT LISTENERS
         window.addEventListener('keydown', (e) => {
             if (e.code === 'KeyD' || e.code === 'ArrowRight') keys.right = true;
             if (e.code === 'KeyA' || e.code === 'ArrowLeft') keys.left = true;
