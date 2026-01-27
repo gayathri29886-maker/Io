@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criminal Law Information</title>
+    <title>Criminal Law Information - 100+ Entry Database</title>
     <style>
         :root {
             --primary-red: #8B0000;
-            --darker-red: #660000;
             --sidebar-bg: #ffffff;
             --main-bg: #f4f6f8;
             --border: #e0e0e0;
@@ -17,76 +16,58 @@
             background-color: var(--main-bg);
             margin: 0;
             display: flex;
-            flex-direction: column; /* Stack header on top of dashboard */
+            flex-direction: column;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* NEW: Top Banner Header like your image */
+        /* Top Banner */
         .top-banner {
             background-color: var(--primary-red);
             color: white;
             text-align: center;
-            padding: 15px 0;
+            padding: 12px 0;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             z-index: 20;
         }
-
         .top-banner h1 {
             margin: 0;
-            font-family: 'Brush Script MT', 'Cursive', sans-serif; /* Stylized font */
-            font-size: 3rem;
+            font-family: 'Brush Script MT', cursive, sans-serif;
+            font-size: 2.8rem;
             font-weight: normal;
-            letter-spacing: 2px;
         }
 
-        /* Dashboard Container */
         .dashboard {
             display: flex;
-            flex: 1; /* Take up remaining height */
+            flex: 1;
             overflow: hidden;
         }
 
-        /* Sidebar UI */
+        /* Sidebar */
         .sidebar {
-            width: 380px;
+            width: 400px;
             background: var(--sidebar-bg);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            padding: 30px;
+            padding: 25px;
             box-sizing: border-box;
         }
-
-        /* Sidebar Title with Red Underline */
         .sidebar-title {
             color: var(--primary-red);
-            margin: 0 0 25px 0;
-            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+            font-size: 1.6rem;
             font-weight: bold;
-            display: inline-block;
             border-bottom: 4px solid var(--primary-red);
             padding-bottom: 8px;
-            line-height: 1.2;
+            width: fit-content;
         }
 
-        .input-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        label {
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: #666;
-            margin-bottom: 8px;
-            display: block;
-            text-transform: uppercase;
-        }
-
+        .input-group { margin-bottom: 15px; position: relative; }
+        label { font-size: 0.7rem; font-weight: 800; color: #666; margin-bottom: 5px; display: block; }
         input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px;
             border: 2px solid #eee;
             border-radius: 8px;
             font-size: 1rem;
@@ -94,75 +75,45 @@
             outline: none;
         }
 
-        /* Custom Search Dropdown */
+        /* Search Dropdown */
         .search-container { position: relative; }
-
-        #arrow-btn {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--primary-red);
-        }
-
+        #arrow-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--primary-red); }
         .dropdown-list {
             position: absolute;
             top: 100%; left: 0; right: 0;
             background: white;
             border: 1px solid var(--border);
             border-radius: 8px;
-            max-height: 250px;
+            max-height: 400px;
             overflow-y: auto;
             display: none;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             z-index: 100;
             margin-top: 5px;
         }
-
-        .dropdown-item {
-            padding: 12px 15px;
-            cursor: pointer;
-            border-bottom: 1px solid #f9f9f9;
-        }
-
+        .dropdown-item { padding: 8px 15px; cursor: pointer; border-bottom: 1px solid #f9f9f9; font-size: 0.85rem; }
         .dropdown-item:hover { background-color: #fff5f5; color: var(--primary-red); }
 
-        /* Content Area */
-        .main-view {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-            display: flex;
-            justify-content: center;
-        }
-
+        /* Main Content */
+        .main-view { flex: 1; padding: 30px; overflow-y: auto; display: flex; justify-content: center; }
         .report {
             background: white;
             width: 100%;
-            max-width: 750px;
-            padding: 40px;
-            border-radius: 15px;
+            max-width: 800px;
+            padding: 30px;
+            border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
             display: none;
             border-top: 6px solid var(--primary-red);
         }
 
-        .section { margin-bottom: 25px; }
-        .section h4 { color: #888; font-size: 0.8rem; margin: 0 0 5px; text-transform: uppercase; }
-        .section p { margin: 0; font-size: 1.1rem; color: #333; font-weight: 500; }
+        .section { margin-bottom: 15px; border-bottom: 1px solid #f9f9f9; padding-bottom: 10px; }
+        .section h4 { color: #888; font-size: 0.7rem; margin: 0 0 3px; text-transform: uppercase; }
+        .section p { margin: 0; font-size: 0.95rem; color: #333; line-height: 1.4; }
 
-        .badge {
-            padding: 5px 12px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
+        .badge { padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-bottom: 15px; display: inline-block; }
         .juv { background: #e8f5e9; color: #2e7d32; }
         .adu { background: #ffebee; color: #c62828; }
-
         .placeholder-text { color: #aaa; text-align: center; margin-top: 100px; }
     </style>
 </head>
@@ -174,71 +125,160 @@
 
 <div class="dashboard">
     <div class="sidebar">
-        <h1 class="sidebar-title">Criminal Law<br>Information</h1>
+        <h1 class="sidebar-title">Criminal Law Information</h1>
         
         <div class="input-group">
             <label>1. ACCUSED AGE</label>
-            <input type="number" id="age-input" placeholder="Enter age...">
+            <input type="number" id="age-input" placeholder="Age...">
         </div>
 
         <div class="input-group">
-            <label>2. CRIMINAL CASE</label>
+            <label>2. SEARCH 100+ CASE TYPES</label>
             <div class="search-container">
-                <input type="text" id="crime-input" placeholder="Search or select..." autocomplete="off">
+                <input type="text" id="crime-input" placeholder="Start typing crime name..." autocomplete="off">
                 <span id="arrow-btn">▼</span>
                 <div id="dropdown" class="dropdown-list"></div>
             </div>
         </div>
         
-        <p style="font-size: 0.7rem; color: #999; margin-top: auto;">© 2026 Legal Resource Tool</p>
+        <p style="font-size: 0.65rem; color: #999; margin-top: auto;">Updated for 2026 Legal Standards.</p>
     </div>
 
     <div class="main-view">
         <div id="placeholder" class="placeholder-text">
-            <h3>Please enter age and select a case from the sidebar.</h3>
+            <h3>Please enter age and choose from 100+ laws.</h3>
         </div>
 
         <div id="report-card" class="report">
             <div id="age-badge" class="badge"></div>
-            <h1 id="res-title" style="margin: 0 0 25px 0; color: var(--primary-red);"></h1>
-            
-            <div class="section">
-                <h4>Legal Code</h4>
-                <p id="res-code"></p>
-            </div>
-            <div class="section">
-                <h4>Punishment Details</h4>
-                <p id="res-punish"></p>
-            </div>
-            <div class="section">
-                <h4>Financial Fine</h4>
-                <p id="res-fine"></p>
-            </div>
-            <div class="section">
-                <h4>Victim Compensation</h4>
-                <p id="res-victim"></p>
-            </div>
+            <h2 id="res-title" style="margin: 0 0 15px 0; color: var(--primary-red);"></h2>
+            <div class="section"><h4>Legal Provision</h4><p id="res-code"></p></div>
+            <div class="section"><h4>Punishment</h4><p id="res-punish"></p></div>
+            <div class="section"><h4>Fine/Penalty</h4><p id="res-fine"></p></div>
+            <div class="section"><h4>Victim Rights</h4><p id="res-victim"></p></div>
         </div>
     </div>
 </div>
 
 <script>
 const casesData = {
-    "Theft": { code: "Sec 303 BNS (Old 378 IPC)", punish: "Up to 3 years or fine.", fine: "Proportional to value.", victim: "Restitution of property." },
-    "Murder": { code: "Sec 103 BNS (Old 302 IPC)", punish: "Life imprisonment or Death.", fine: "Court discretion.", victim: "Compensation Scheme." },
-    "Assault": { code: "Sec 115 BNS (Old 351 IPC)", punish: "1-7 years depending on hurt.", fine: "Medical fine.", victim: "Reimbursement." },
-    "Cyber Crime": { code: "IT Act 2000", punish: "3 years to Life.", fine: "Hefty penalty.", victim: "Damages recovery." },
-    "Drug Trafficking": { code: "NDPS Act, 1985", punish: "10-20 years rigorous jail.", fine: "Min ₹1 Lakh.", victim: "State rehab." },
-    "Domestic Violence": { code: "DV Act 2005", punish: "Up to 3 years jail.", fine: "Maintenance costs.", victim: "Protection orders." },
-    "Fraud": { code: "Sec 318 BNS", punish: "Up to 7 years.", fine: "Based on loss.", victim: "Civil recovery." },
-    "Extortion": { code: "Sec 308 BNS", punish: "Up to 7 years.", fine: "Penal fine.", victim: "Asset recovery." },
-    "Robbery": { code: "Sec 309 BNS", punish: "Up to 10 years.", fine: "Mandatory fine.", victim: "Medical care." },
-    "Kidnapping": { code: "Sec 137 BNS", punish: "Up to 7 years.", fine: "Variable.", victim: "Counseling." },
-    "Forgery": { code: "Sec 336 BNS", punish: "Up to 2 years.", fine: "Standard fine.", victim: "Doc cancellation." },
-    "Counterfeiting": { code: "Sec 178 BNS", punish: "7 years to Life.", fine: "Max penalty.", victim: "Prosecution." },
-    "Defamation": { code: "Sec 356 BNS", punish: "Up to 2 years.", fine: "Compensation.", victim: "Public apology." },
-    "Trespass": { code: "Sec 329 BNS", punish: "Up to 3 months.", fine: "Nominal.", victim: "Injunctions." },
-    "Bribery": { code: "P.C. Act, 1988", punish: "3-7 years.", fine: "Asset seizure.", victim: "Public interest." }
+    // VIOLENT & HOMICIDE
+    "Murder": { code: "Sec 103 BNS (Old 302 IPC)", punish: "Death or Life Imprisonment.", fine: "Standard fine.", victim: "Compensation Scheme." },
+    "Attempt to Murder": { code: "Sec 109 BNS", punish: "Up to 10 years or Life.", fine: "Varies.", victim: "Medical Aid." },
+    "Culpable Homicide": { code: "Sec 105 BNS", punish: "Life or 10 years.", fine: "Varies.", victim: "Legal Support." },
+    "Dowry Death": { code: "Sec 80 BNS (Old 304B IPC)", punish: "7 years to Life.", fine: "Mandatory.", victim: "Family Support." },
+    "Abetment of Suicide": { code: "Sec 108 BNS", punish: "Up to 10 years.", fine: "Significant.", victim: "Counseling." },
+    "Assault": { code: "Sec 115 BNS", punish: "1-7 years.", fine: "Medical costs.", victim: "Damages." },
+    "Kidnapping": { code: "Sec 137 BNS", punish: "Up to 7 years.", fine: "Variable.", victim: "Rehabilitation." },
+    "Abduction": { code: "Sec 138 BNS", punish: "Fine and Imprisonment.", fine: "Fixed.", victim: "Rescue ops." },
+    "Wrongful Confinement": { code: "Sec 127 BNS", punish: "Up to 1 year.", fine: "₹1,000.", victim: "Liberty Restoration." },
+    "Criminal Force": { code: "Sec 130 BNS", punish: "Up to 3 months.", fine: "₹500.", victim: "Legal costs." },
+
+    // PROPERTY & THEFT
+    "Theft": { code: "Sec 303 BNS", punish: "Up to 3 years.", fine: "Value-based.", victim: "Restitution." },
+    "Robbery": { code: "Sec 309 BNS", punish: "Up to 10 years.", fine: "Strict.", victim: "Asset Recovery." },
+    "Dacoity": { code: "Sec 310 BNS", punish: "Life or 10 years.", fine: "High.", victim: "State Aid." },
+    "Extortion": { code: "Sec 308 BNS", punish: "Up to 7 years.", fine: "Penal.", victim: "Restitution." },
+    "Burglary": { code: "Sec 331 BNS", punish: "Up to 5 years.", fine: "Variable.", victim: "Property Claim." },
+    "Criminal Trespass": { code: "Sec 329 BNS", punish: "Up to 3 months.", fine: "₹500.", victim: "Injunction." },
+    "House Trespass": { code: "Sec 330 BNS", punish: "Up to 1 year.", fine: "₹1,000.", victim: "Eviction." },
+    "Mischief": { code: "Sec 324 BNS", punish: "Fine or 3 months.", fine: "Damage-based.", victim: "Compensation." },
+    "Arson (Fire Mischief)": { code: "Sec 326 BNS", punish: "Life or 10 years.", fine: "Heavy.", victim: "Property Rehab." },
+    "Receiving Stolen Property": { code: "Sec 314 BNS", punish: "Up to 3 years.", fine: "Value-based.", victim: "None." },
+
+    // ECONOMIC & FRAUD
+    "Cheating (Fraud)": { code: "Sec 318 BNS", punish: "Up to 7 years.", fine: "Loss-based.", victim: "Civil Suit." },
+    "Forgery": { code: "Sec 336 BNS", punish: "Up to 2 years.", fine: "Standard.", victim: "Doc Nullification." },
+    "Money Laundering": { code: "PMLA Act", punish: "3-7 years.", fine: "5 Lakhs+.", victim: "Asset Seizure." },
+    "Bribery": { code: "P.C. Act", punish: "3-7 years.", fine: "Confiscation.", victim: "Public Interest." },
+    "Counterfeiting Currency": { code: "Sec 178 BNS", punish: "Life Imprisonment.", fine: "Extreme.", victim: "None." },
+    "Tax Evasion": { code: "IT Act 1961", punish: "6 months to 7 years.", fine: "200% tax.", victim: "Public Fund." },
+    "Insider Trading": { code: "SEBI Act", punish: "Up to 10 years.", fine: "25 Crores+.", victim: "Investor Fund." },
+    "Embezzlement": { code: "Sec 316 BNS", punish: "Up to 7 years.", fine: "Amount-based.", victim: "Recovery." },
+    "Bank Fraud": { code: "BNS + Banking Act", punish: "Up to 10 years.", fine: "Scale-based.", victim: "Asset recovery." },
+    "Pyramid Scheme Fraud": { code: "Prize Chits Act", punish: "Up to 3 years.", fine: "Variable.", victim: "Consumer Redress." },
+
+    // WOMEN & CHILD
+    "Domestic Violence": { code: "DV Act 2005", punish: "Up to 3 years.", fine: "Maintenance.", victim: "Residence Right." },
+    "Sexual Harassment": { code: "Sec 73 BNS", punish: "1-3 years.", fine: "Standard.", victim: "Privacy Protection." },
+    "Stalking": { code: "Sec 78 BNS", punish: "Up to 3 years.", fine: "Varies.", victim: "Protection Order." },
+    "Voyeurism": { code: "Sec 77 BNS", punish: "1-7 years.", fine: "Fixed.", victim: "Data deletion." },
+    "Acid Attack": { code: "Sec 124 BNS", punish: "10 years to Life.", fine: "Medical Costs.", victim: "Full Rehab." },
+    "Child Labour": { code: "Child Labour Act", punish: "6 months to 2 years.", fine: "₹50,000.", victim: "Education aid." },
+    "POCSO (Minor Harm)": { code: "POCSO Act", punish: "20 years to Death.", fine: "Strict.", victim: "Full Care." },
+    "Female Infanticide": { code: "PNDT Act", punish: "3-5 years.", fine: "₹1 Lakh.", victim: "Social Support." },
+    "Child Marriage": { code: "PCMA Act", punish: "Up to 2 years.", fine: "₹1 Lakh.", victim: "Annulment." },
+    "Human Trafficking": { code: "Sec 143 BNS", punish: "7 years to Life.", fine: "Proportional.", victim: "Rehabilitation." },
+
+    // CYBER CRIMES
+    "Hacking": { code: "IT Act Sec 66", punish: "Up to 3 years.", fine: "5 Lakhs.", victim: "Data recovery." },
+    "Cyber Terrorism": { code: "IT Act Sec 66F", punish: "Life Imprisonment.", fine: "Unlimited.", victim: "National Security." },
+    "Identity Theft": { code: "IT Act Sec 66C", punish: "Up to 3 years.", fine: "1 Lakh.", victim: "ID Restoration." },
+    "Phishing": { code: "IT Act Sec 66D", punish: "Up to 3 years.", fine: "1 Lakh.", victim: "Money recovery." },
+    "Digital Privacy Breach": { code: "IT Act Sec 66E", punish: "Up to 3 years.", fine: "2 Lakhs.", victim: "Damages." },
+    "Cyber Stalking": { code: "IT Act + BNS", punish: "Up to 3 years.", fine: "Standard.", victim: "Safety Orders." },
+    "Online Obscenity": { code: "IT Act Sec 67", punish: "3-5 years.", fine: "5-10 Lakhs.", victim: "Takedown Right." },
+    "Spreading Malware": { code: "IT Act Sec 43", punish: "Civil Penalty.", fine: "Compensation.", victim: "Full damages." },
+    "Data Theft": { code: "IT Act + BNS", punish: "Up to 3 years.", fine: "Value-based.", victim: "IP Protection." },
+    "Credit Card Fraud": { code: "BNS + IT Act", punish: "Up to 7 years.", fine: "Loss-based.", victim: "Chargeback right." },
+
+    // DRUGS & ALCOHOL
+    "Drug Consumption": { code: "NDPS Act Sec 27", punish: "6 months to 1 year.", fine: "₹20,000.", victim: "Rehab." },
+    "Drug Trafficking": { code: "NDPS Act", punish: "10-20 years.", fine: "2 Lakhs.", victim: "None." },
+    "Illegal Distillery": { code: "Excise Act", punish: "1-5 years.", fine: "Fixed.", victim: "Health tracking." },
+    "Drunk Driving": { code: "MV Act Sec 185", punish: "6 months to 2 years.", fine: "₹15,000.", victim: "Insurance Claim." },
+    "Selling Drugs to Minors": { code: "NDPS + JJ Act", punish: "7-10 years.", fine: "High.", victim: "Rehab support." },
+
+    // PUBLIC ORDER
+    "Rioting": { code: "Sec 191 BNS", punish: "Up to 2 years.", fine: "Standard.", victim: "State protection." },
+    "Unlawful Assembly": { code: "Sec 189 BNS", punish: "6 months or fine.", fine: "Fixed.", victim: "Peace Orders." },
+    "Affray (Public Fight)": { code: "Sec 196 BNS", punish: "1 month.", fine: "₹1,000.", victim: "None." },
+    "Defamation": { code: "Sec 356 BNS", punish: "Up to 2 years.", fine: "Damages.", victim: "Public Apology." },
+    "Hate Speech": { code: "Sec 197 BNS", punish: "Up to 3 years.", fine: "Variable.", victim: "Community peace." },
+    "Sedition (Against Nation)": { code: "Sec 152 BNS", punish: "7 years to Life.", fine: "Strict.", victim: "None." },
+    "Public Nuisance": { code: "Sec 270 BNS", punish: "Fine.", fine: "₹500.", victim: "Abatement." },
+    "Adulteration of Food": { code: "Sec 274 BNS", punish: "6 months.", fine: "₹1,000.", victim: "Consumer rights." },
+    "Negligent Spread of Infection": { code: "Sec 271 BNS", punish: "6 months.", fine: "Standard.", victim: "Health care." },
+    "Disobeying Public Servant": { code: "Sec 223 BNS", punish: "1 month.", fine: "₹500.", victim: "None." },
+
+    // SPECIAL & MISC
+    "Wildlife Hunting": { code: "Wildlife Act", punish: "3-7 years.", fine: "₹25,000.", victim: "Ecosystem." },
+    "Environmental Pollution": { code: "EPA 1986", punish: "Up to 5 years.", fine: "₹1 Lakh/day.", victim: "Clean-up fund." },
+    "Copyright Theft": { code: "Copyright Act", punish: "6 months to 3 years.", fine: "₹2 Lakhs.", victim: "Royalty claim." },
+    "Illegal Mining": { code: "MMDR Act", punish: "Up to 5 years.", fine: "₹5 Lakhs/Hectare.", victim: "State revenue." },
+    "Arms Possession (No License)": { code: "Arms Act", punish: "3-7 years.", fine: "Fixed.", victim: "Public safety." },
+    "Gambling (Public)": { code: "Public Gambling Act", punish: "3 months.", fine: "₹200.", victim: "None." },
+    "Animal Cruelty": { code: "PCA Act 1960", punish: "Fine or 3 months.", fine: "Nominal.", victim: "Shelter." },
+    "Black Marketing": { code: "EC Act 1955", punish: "7 years.", fine: "Stock Seizure.", victim: "Fair Price." },
+    "Prostitution (Pimping)": { code: "PITA Act", punish: "7 years to Life.", fine: "High.", victim: "Rehabilitation." },
+    "Ticket Resale (Scalping)": { code: "Railway/Sports Act", punish: "Fine/Imprisonment.", fine: "Proportional.", victim: "Public access." },
+    
+    // Add 25 more entries for a full 100
+    "Begging (Forced)": { code: "JJ Act", punish: "5-10 years.", fine: "₹1 Lakh.", victim: "Welfare Home." },
+    "Ragging": { code: "Anti-Ragging Laws", punish: "Up to 2 years.", fine: "₹10,000.", victim: "Expulsion right." },
+    "Electoral Bribery": { code: "Sec 171B IPC/BNS", punish: "1 year.", fine: "Standard.", victim: "Free Fair Vote." },
+    "Voter Personation": { code: "Sec 171D IPC/BNS", punish: "1 year.", fine: "Standard.", victim: "Democracy." },
+    "False Evidence (Perjury)": { code: "Sec 229 BNS", punish: "7 years.", fine: "Mandatory.", victim: "Justice system." },
+    "Harbouring Offender": { code: "Sec 249 BNS", punish: "Varies.", fine: "Standard.", victim: "None." },
+    "Resistance to Arrest": { code: "Sec 221 BNS", punish: "6 months.", fine: "₹500.", victim: "Officer Safety." },
+    "Illegal Grabbing of Land": { code: "Land Grabbing Act", punish: "6 months to 5 years.", fine: "Property Value.", victim: "Ownership Return." },
+    "Interfering with Telecom": { code: "Telegraph Act", punish: "3 years.", fine: "Variable.", victim: "Communication." },
+    "Mutilating National Flag": { code: "Flag Code", punish: "3 years.", fine: "Standard.", victim: "National Pride." },
+    "Insulting National Anthem": { code: "Prevention of Insults Act", punish: "3 years.", fine: "Standard.", victim: "National Dignity." },
+    "Custodial Torture": { code: "BNS + Police Act", punish: "10 years.", fine: "Discretionary.", victim: "Human Rights claim." },
+    "Slavery (Forced Labour)": { code: "Sec 146 BNS", punish: "Fine and Jail.", fine: "Heavy.", victim: "Compensation." },
+    "Selling Minors for Prostitution": { code: "Sec 141 BNS", punish: "Life Imprisonment.", fine: "Strict.", victim: "Full Rehab." },
+    "Impersonating Public Servant": { code: "Sec 204 BNS", punish: "2 years.", fine: "Standard.", victim: "Public Trust." },
+    "Contempt of Court": { code: "Contempt Act", punish: "6 months.", fine: "₹2,000.", victim: "Judicial Integrity." },
+    "Breach of Peace": { code: "Sec 196 BNS", punish: "Fine.", fine: "₹1,000.", victim: "Community." },
+    "Weapon Training (Illegal)": { code: "BNS + Arms Act", punish: "7 years.", fine: "Fixed.", victim: "National Safety." },
+    "Conspiracy": { code: "Sec 61 BNS", punish: "Same as offense.", fine: "Same as offense.", victim: "Varies." },
+    "Maiming Animal": { code: "Sec 325 BNS", punish: "Up to 5 years.", fine: "Fixed.", victim: "Shelter." },
+    "Desecrating Place of Worship": { code: "Sec 298 BNS", punish: "2 years.", fine: "Standard.", victim: "Religious Peace." },
+    "Obstructing Highway": { code: "Sec 285 BNS", punish: "Fine.", fine: "₹500.", victim: "Public Travel." },
+    "Dataloss by Negligence": { code: "IT Act Sec 43A", punish: "Compensation.", fine: "Unlimited.", victim: "Full Loss Recovery." },
+    "Selling Expired Medicine": { code: "Drugs & Cosmetics Act", punish: "Life Imprisonment.", fine: "₹10 Lakhs+.", victim: "Medical Aid." },
+    "Organ Trafficking": { code: "THOA Act", punish: "10 years.", fine: "₹1 Crore.", victim: "Health Support." }
 };
 
 const crimeInput = document.getElementById('crime-input');
@@ -247,51 +287,29 @@ const arrowBtn = document.getElementById('arrow-btn');
 
 function populateDropdown(filter = "") {
     dropdown.innerHTML = "";
-    Object.keys(casesData).forEach(crime => {
+    const keys = Object.keys(casesData).sort();
+    keys.forEach(crime => {
         if (crime.toLowerCase().includes(filter.toLowerCase())) {
             const item = document.createElement('div');
             item.className = 'dropdown-item';
             item.innerText = crime;
-            item.onclick = () => selectCrime(crime);
+            item.onclick = () => { crimeInput.value = crime; dropdown.style.display = 'none'; showAnalysis(); };
             dropdown.appendChild(item);
         }
     });
 }
 
-function selectCrime(crime) {
-    crimeInput.value = crime;
-    dropdown.style.display = 'none';
-    showAnalysis();
-}
-
-arrowBtn.onclick = (e) => {
-    e.stopPropagation();
-    const isVisible = dropdown.style.display === 'block';
-    populateDropdown();
-    dropdown.style.display = isVisible ? 'none' : 'block';
-};
-
-crimeInput.oninput = () => {
-    dropdown.style.display = 'block';
-    populateDropdown(crimeInput.value);
-};
-
+arrowBtn.onclick = (e) => { e.stopPropagation(); dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block'; populateDropdown(); };
+crimeInput.oninput = () => { dropdown.style.display = 'block'; populateDropdown(crimeInput.value); showAnalysis(); };
 document.onclick = () => dropdown.style.display = 'none';
 
 function showAnalysis() {
     const age = parseInt(document.getElementById('age-input').value);
     const crime = crimeInput.value;
-    const report = document.getElementById('report-card');
-    const placeholder = document.getElementById('placeholder');
+    if (!age || !casesData[crime]) return;
 
-    if (!age || !casesData[crime]) {
-        report.style.display = 'none';
-        placeholder.style.display = 'block';
-        return;
-    }
-
-    placeholder.style.display = 'none';
-    report.style.display = 'block';
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('report-card').style.display = 'block';
     
     const data = casesData[crime];
     document.getElementById('res-title').innerText = crime.toUpperCase();
@@ -301,16 +319,13 @@ function showAnalysis() {
 
     const badge = document.getElementById('age-badge');
     if (age < 18) {
-        badge.innerText = "JUVENILE CASE";
-        badge.className = "badge juv";
-        document.getElementById('res-punish').innerText = "Rehabilitation focus. Max 3 years in a Reformatory Home.";
+        badge.innerText = "JUVENILE CASE"; badge.className = "badge juv";
+        document.getElementById('res-punish').innerText = "Rehabilitation focus. Max 3 years in a Reformatory Home under Juvenile Justice Act.";
     } else {
-        badge.innerText = "ADULT CASE";
-        badge.className = "badge adu";
+        badge.innerText = "ADULT CASE"; badge.className = "badge adu";
         document.getElementById('res-punish').innerText = data.punish;
     }
 }
-
 document.getElementById('age-input').oninput = showAnalysis;
 populateDropdown();
 </script>
