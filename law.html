@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criminal Law Information</title>
+<style>
+/* Basic Styles */
+body {
+Arial, sans-serif;
+background-color: #f4f4f4;
+0;
+padding: 0;
+}
+header {
+background-color: #8B0000;
+color: white;
+padding: 15px;
+text-align: center;
+}
+.container {
+width: 80%;
+20px auto;
+padding: 20px;
+}
+h1 {
+font-size: 2.5em;
+}
+.select-container {
+20px;
+}
+label {
+font-size: 1.2em;
+}
+select, input[type="text"] {
+padding: 10px;
+font-size: 1.1em;
+border: 1px solid #ddd;
+border-radius: 5px;
+width: 100%;
+}
+.result {
+background-color: #fff;
+padding: 15px;
+border-radius: 8px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+20px;
+}
+footer {
+background-color: #8B0000;
+color: white;
+text-align: center;
+padding: 10px;
+30px;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Criminal Law Information</h1>
+<p>Enter a criminal case to find out about the law, punishment, fines, and specific details.</p>
+</header>
+<div class="container">
+<div class="select-container">
+<label for="crime-select">Select a Criminal Case:</label>
+<select id="crime-select">
+<option value="">--Select a Case--</option>
+<option value="theft">Theft</option>
+<option value="assault">Assault</option>
+<option value="murder">Murder</option>
+<option value="robbery">Robbery</option>
+<option value="fraud">Fraud</option>
+<option value="domestic-violence">Domestic Violence</option>
+<option value="drug-trafficking">Drug Trafficking</option>
+</select>
+</div>
+<div id="result" class="result">
+<!-- Information about the selected case will be displayed here -->
+</div>
+</div>
+<footer>
+<p>&copy; 2025 Criminal Law Info. All Rights Reserved.</p>
+</footer>
+<script>
+// Data for Criminal Cases
+const casesData = {
+theft: {
+law: "Section 378 of the Indian Penal Code (IPC)",
+punishment: "Imprisonment up to 3 years, or with fine, or both.",
+fine: "Fine amount varies depending on the value of stolen property. If the value exceeds a certain threshold, the fine can increase significantly.",
+example: "Example: A person caught stealing goods worth Rs. 5,000 could be fined Rs. 5,000 or imprisoned for 1 year.",
+compensation: "Victims of theft may be entitled to compensation if the stolen goods are recovered."
+},
+assault: {
+law: "Section 351 of the Indian Penal Code (IPC)",
+punishment: "Imprisonment up to 3 months, or fine, or both.",
+fine: "Fines can vary depending on the severity of the assault.",
+example: "Example: A person causing bodily harm to another in a street fight could face imprisonment for up to 3 months and a fine.",
+compensation: "Victims of assault can file a compensation claim for medical treatment and emotional distress."
+},
+murder: {
+law: "Section 302 of the Indian Penal Code (IPC)",
+punishment: "Life imprisonment or death sentence.",
+fine: "No fine specified under the law. However, compensation may be ordered by the court for the victim’s family.",
+example: "Example: A person convicted of killing another in a premeditated manner could face the death penalty or life imprisonment.",
+compensation: "Family members of the victim can claim compensation under the Criminal Injuries Compensation Scheme."
+},
+robbery: {
+law: "Section 390 of the Indian Penal Code (IPC)",
+punishment: "Imprisonment up to 10 years, or life imprisonment, and fine.",
+fine: "The fine is determined by the severity of the crime and the value of stolen goods.",
+example: "Example: A person committing a robbery at a bank with weapons could face a life sentence and heavy fines.",
+compensation: "Victims of robbery may claim compensation if there is injury or loss during the crime."
+},
+fraud: {
+law: "Section 420 of the Indian Penal Code (IPC)",
+punishment: "Imprisonment up to 7 years and a fine.",
+fine: "The fine amount varies depending on the scale of fraud. Large-scale fraud can lead to heavy fines.",
+example: "Example: A person caught deceiving people with a fake investment scheme could face 7 years of imprisonment and a fine.",
+compensation: "Victims of fraud can file a civil lawsuit to recover their losses."
+},
+"domestic-violence": {
+law: "Protection of Women from Domestic Violence Act, 2005",
+punishment: "Imprisonment up to 1 year, or a fine, or both.",
+fine: "Fines vary depending on the severity of the violence and damage caused.",
+example: "Example: A person found guilty of physical abuse in a domestic setting may be imprisoned for up to 1 year and fined.",
+compensation: "Victims of domestic violence can claim financial compensation for medical expenses, emotional trauma, and loss of property."
+},
+"drug-trafficking": {
+law: "Narcotic Drugs and Psychotropic Substances Act, 1985",
+punishment: "Imprisonment ranging from 10 years to life, and fine.",
+fine: "The fine amount is proportional to the quantity of narcotic drugs involved in trafficking.",
+example: "Example: A person arrested for trafficking 1 kg of heroin could face life imprisonment and a fine of up to Rs. 1 lakh or more.",
+compensation: "Drug trafficking victims are unlikely to receive compensation, but rehabilitation programs are available for those affected by drug use."
+}
+};
+// Function to display information about the case
+function displayCaseInfo(caseType) {
+const resultContainer = document.getElementById("result");
+if (caseType === "") {
+resultContainer.innerHTML = "<p>Please select a criminal case from the dropdown.</p>";
+return;
+}
+const caseInfo = casesData[caseType];
+if (!caseInfo) {
+resultContainer.innerHTML = "<p>No information available for this case.</p>";
+return;
+}
+let content = `
+<h2>Criminal Case: ${caseType.charAt(0).toUpperCase() + caseType.slice(1)}</h2>
+<p><strong>Law:</strong> ${caseInfo.law}</p>
+<p><strong>Punishment:</strong> ${caseInfo.punishment}</p>
+<p><strong>Fine:</strong> ${caseInfo.fine}</p>
+<p><strong>Example:</strong> ${caseInfo.example}</p>
+<p><strong>Compensation for Victims:</strong> ${caseInfo.compensation}</p>
+`;
+resultContainer.innerHTML = content;
+}
+// Event listener for when the user selects a case
+document.getElementById("crime-select").addEventListener("change", function() {
+displayCaseInfo(this.value);
+});
+// Display default message when the app loads
+displayCaseInfo("");
+</script>
+</body>
+</html>
