@@ -3,111 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criminal Law Info & Age Analysis</title>
+    <title>Criminal Law Search Portal</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            color: #333;
         }
         header {
             background-color: #8B0000;
             color: white;
-            padding: 20px;
+            padding: 30px 10px;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         .container {
             width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+            max-width: 700px;
+            margin: -30px auto 40px;
+            padding: 30px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
         }
         label {
             display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #555;
         }
-        select, input[type="number"] {
-            padding: 12px;
-            font-size: 1rem;
-            border: 2px solid #ddd;
-            border-radius: 6px;
+        input {
+            padding: 14px;
+            font-size: 1.05rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             width: 100%;
             box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
         }
-        select:focus, input:focus {
+        input:focus {
             border-color: #8B0000;
             outline: none;
+            box-shadow: 0 0 8px rgba(139, 0, 0, 0.15);
+        }
+        /* Style for the custom arrow on datalist */
+        input::-webkit-calendar-picker-indicator {
+            color: #8B0000;
+            cursor: pointer;
+            font-size: 1.2rem;
         }
         .result {
             margin-top: 30px;
-            padding: 20px;
-            border-left: 5px solid #8B0000;
-            background-color: #fff9f9;
+            padding: 25px;
+            border-left: 6px solid #8B0000;
+            background-color: #fffbfb;
+            border-radius: 4px;
             display: none;
+            animation: fadeIn 0.5s ease;
         }
-        .juvenile-badge {
-            background-color: #2e7d32;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.9em;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-transform: uppercase;
             display: inline-block;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
-        .adult-badge {
-            background-color: #c62828;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
+        .juvenile { background: #e8f5e9; color: #2e7d32; }
+        .adult { background: #ffebee; color: #c62828; }
+        
         footer {
-            background-color: #333;
-            color: white;
             text-align: center;
-            padding: 15px;
-            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9em;
+            color: #777;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Criminal Law Information Portal</h1>
-    <p>Legal Guidance based on Case Type and Age</p>
+    <h1>Legal Information System</h1>
+    <p>Search crimes, age laws, and penal consequences</p>
 </header>
 
 <div class="container">
     <div class="input-group">
-        <label for="user-age">Step 1: Enter Age of the Accused</label>
-        <input type="number" id="user-age" placeholder="Enter age (e.g. 21)" min="1" max="110">
+        <label for="user-age">1. Enter Age</label>
+        <input type="number" id="user-age" placeholder="Type age here..." min="1" max="110">
     </div>
 
     <div class="input-group">
-        <label for="crime-select">Step 2: Select a Criminal Case</label>
-        <select id="crime-select">
-            <option value="">--Select a Case--</option>
-            <option value="theft">Theft</option>
-            <option value="assault">Assault</option>
-            <option value="murder">Murder</option>
-            <option value="robbery">Robbery</option>
-            <option value="fraud">Fraud (Cheating)</option>
-            <option value="domestic-violence">Domestic Violence</option>
-            <option value="drug-trafficking">Drug Trafficking</option>
-        </select>
+        <label for="crime-search">2. Search or Select Criminal Case</label>
+        <input list="crime-list" id="crime-search" placeholder="Type to search (e.g. Theft, Murder)...">
+        <datalist id="crime-list">
+            <option value="Theft">
+            <option value="Assault">
+            <option value="Murder">
+            <option value="Robbery">
+            <option value="Fraud (Cheating)">
+            <option value="Domestic Violence">
+            <option value="Drug Trafficking">
+            <option value="Cyber Crime">
+        </datalist>
     </div>
 
     <div id="result" class="result">
@@ -115,102 +124,105 @@
 </div>
 
 <footer>
-    <p>&copy; 2026 Criminal Law Database. Consult a lawyer for legal advice.</p>
+    <p>&copy; 2026 Criminal Law Database (BNS/IPC Compliant)</p>
 </footer>
 
 <script>
+// Data mapping for crimes
 const casesData = {
-    theft: {
-        law: "Section 303 of BNS (Formerly Sec 378 IPC)",
+    "theft": {
+        law: "Section 303 of BNS (Replaces Sec 378 IPC)",
         punishment: "Imprisonment up to 3 years, or fine, or both.",
-        fine: "Varies based on stolen value.",
-        compensation: "Victims may seek restoration of property."
+        fine: "Proportional to value stolen.",
+        compensation: "Restoration of property to the owner."
     },
-    assault: {
-        law: "Section 115 of BNS (Formerly Sec 351 IPC)",
-        punishment: "Varies from 1 year to 7 years depending on hurt caused.",
-        fine: "Dependent on medical expenses and severity.",
-        compensation: "Victims can claim medical cost coverage."
+    "assault": {
+        law: "Section 115 of BNS (Replaces Sec 351 IPC)",
+        punishment: "Varies from 1 to 7 years depending on gravity.",
+        fine: "Medical costs plus penalty.",
+        compensation: "Medical reimbursement for the victim."
     },
-    murder: {
-        law: "Section 103 of BNS (Formerly Sec 302 IPC)",
-        punishment: "Life imprisonment or death penalty.",
-        fine: "Court-discretionary fine for victim's family.",
-        compensation: "State-funded victim compensation schemes apply."
+    "murder": {
+        law: "Section 103 of BNS (Replaces Sec 302 IPC)",
+        punishment: "Life imprisonment or Death Penalty.",
+        fine: "Discretionary fine.",
+        compensation: "Victim Compensation Scheme for dependents."
     },
-    robbery: {
-        law: "Section 309 of BNS (Formerly Sec 390 IPC)",
-        punishment: "Rigorous imprisonment up to 10 years and fine.",
-        fine: "Substantial fines usually imposed.",
-        compensation: "Restitution of stolen assets."
+    "robbery": {
+        law: "Section 309 of BNS (Replaces Sec 390 IPC)",
+        punishment: "Up to 10 years rigorous imprisonment.",
+        fine: "Mandatory fine.",
+        compensation: "Recovery of assets for the victim."
     },
-    fraud: {
-        law: "Section 318 of BNS (Formerly Sec 420 IPC)",
-        punishment: "Imprisonment up to 7 years and fine.",
-        fine: "Proportional to the amount of financial loss.",
-        compensation: "Civil suits can run parallel for recovery."
+    "fraud (cheating)": {
+        law: "Section 318 of BNS (Replaces Sec 420 IPC)",
+        punishment: "Imprisonment up to 7 years.",
+        fine: "Based on the scale of deception.",
+        compensation: "Civil recovery possible via parallel suit."
     },
-    "domestic-violence": {
+    "domestic violence": {
         law: "DV Act, 2005 & BNS Section 85",
         punishment: "Up to 3 years imprisonment.",
-        fine: "Includes maintenance and medical costs.",
-        compensation: "Right to reside in shared household and monetary relief."
+        fine: "Monthly maintenance/medical expenses.",
+        compensation: "Protection orders and financial relief."
     },
-    "drug-trafficking": {
+    "drug trafficking": {
         law: "NDPS Act, 1985",
         punishment: "10 to 20 years rigorous imprisonment.",
-        fine: "₹1 Lakh to ₹2 Lakhs minimum.",
-        compensation: "Rehabilitation support for victims."
+        fine: "₹1,00,000 to ₹2,00,000.",
+        compensation: "State-led rehabilitation programs."
+    },
+    "cyber crime": {
+        law: "Information Technology Act, 2000",
+        punishment: "3 to 7 years depending on the hack/fraud.",
+        fine: "Hefty financial penalties.",
+        compensation: "Adjudicating officer can award damages."
     }
 };
 
-function updateDisplay() {
-    const ageInput = document.getElementById("user-age").value;
-    const crimeType = document.getElementById("crime-select").value;
+function processAnalysis() {
+    const ageVal = document.getElementById("user-age").value;
+    const searchVal = document.getElementById("crime-search").value.toLowerCase();
     const resultDiv = document.getElementById("result");
 
-    if (!ageInput || !crimeType) {
+    if (!ageVal || !searchVal || !casesData[searchVal]) {
         resultDiv.style.display = "none";
         return;
     }
 
-    const age = parseInt(ageInput);
-    const info = casesData[crimeType];
+    const age = parseInt(ageVal);
+    const info = casesData[searchVal];
     resultDiv.style.display = "block";
 
-    let ageBracketHtml = "";
-    let finalPunishment = "";
+    let ageLabel = age < 18 ? "Juvenile" : "Adult";
+    let badgeClass = age < 18 ? "juvenile" : "adult";
+    
+    let legalPunishment = "";
 
-    // Juvenile Justice Logic
+    // Age-specific logic
     if (age < 18) {
-        ageBracketHtml = `<span class="juvenile-badge">JUVENILE CASE (Under 18)</span>`;
-        if (age >= 16 && (crimeType === 'murder' || crimeType === 'drug-trafficking')) {
-            finalPunishment = "<strong>Heinous Offense:</strong> Under JJ Act, the Juvenile Justice Board may decide to try the minor as an adult. Otherwise, max 3 years in a Reformatory.";
+        if (age >= 16 && (searchVal === 'murder' || searchVal === 'drug trafficking')) {
+            legalPunishment = "<strong>Heinous Crime Rule:</strong> For ages 16-18, the JJ Board may transfer the case to Children's Court for trial as an adult.";
         } else {
-            finalPunishment = "No jail. Sent to an Observation Home/Special Home for max 3 years. Focus on rehabilitation.";
+            legalPunishment = "Rehabilitation focus. Maximum 3 years in a Special Home. No jail time.";
         }
     } else {
-        ageBracketHtml = `<span class="adult-badge">ADULT CASE (18+)</span>`;
-        finalPunishment = info.punishment;
+        legalPunishment = info.punishment;
     }
 
     resultDiv.innerHTML = `
-        ${ageBracketHtml}
-        <h2 style="margin-top:5px;">${crimeType.replace('-', ' ').toUpperCase()}</h2>
-        <p><strong>Primary Statute:</strong> ${info.law}</p>
-        <p><strong>Legal Consequences:</strong> ${finalPunishment}</p>
-        <p><strong>Financial Penalties:</strong> ${info.fine}</p>
+        <span class="badge ${badgeClass}">${ageLabel} (Age ${age})</span>
+        <h2 style="margin-top:0; color:#8B0000;">${searchVal.toUpperCase()}</h2>
+        <p><strong>Applicable Statute:</strong> ${info.law}</p>
+        <p><strong>Legal Consequences:</strong> ${legalPunishment}</p>
+        <p><strong>Financial Fine:</strong> ${info.fine}</p>
         <p><strong>Victim Rights:</strong> ${info.compensation}</p>
-        <p style="font-size:0.85em; color:#666; font-style:italic; margin-top:15px;">
-            Note: For an individual aged ${age}, the ${age < 18 ? 'Juvenile Justice (Care and Protection of Children) Act' : 'Bharatiya Nyaya Sanhita'} is the governing framework.
-        </p>
     `;
 }
 
-// Event Listeners
-document.getElementById("user-age").addEventListener("input", updateDisplay);
-document.getElementById("crime-select").addEventListener("change", updateDisplay);
-
+// Listen for changes in both inputs
+document.getElementById("user-age").addEventListener("input", processAnalysis);
+document.getElementById("crime-search").addEventListener("input", processAnalysis);
 </script>
 
 </body>
