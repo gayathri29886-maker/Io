@@ -3,64 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criminal Law Dashboard</title>
+    <title>Criminal Law Analytics</title>
     <style>
         :root {
             --primary-red: #8B0000;
             --sidebar-bg: #ffffff;
-            --main-bg: #f8f9fa;
-            --border-color: #ddd;
+            --main-bg: #f4f6f8;
+            --border: #e0e0e0;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--main-bg);
             margin: 0;
+            display: flex;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            background-color: var(--primary-red);
-            color: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        /* Dashboard Layout */
-        .dashboard {
-            display: flex;
-            flex: 1;
             overflow: hidden;
         }
-        /* Left Sidebar (Input) */
+
+        /* Sidebar UI */
         .sidebar {
-            width: 350px;
+            width: 380px;
             background: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            padding: 30px;
-            box-sizing: border-box;
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            padding: 30px;
+            box-sizing: border-box;
+            z-index: 10;
         }
-        /* Right Content (Results) */
-        .main-content {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
+
         .input-group {
+            margin-bottom: 25px;
             position: relative;
         }
+
         label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #666;
+            margin-bottom: 8px;
             display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #444;
-            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
+
         input {
             width: 100%;
             padding: 12px 15px;
@@ -68,202 +53,235 @@
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
-            transition: border-color 0.3s;
         }
-        input:focus {
-            border-color: var(--primary-red);
-            outline: none;
+
+        /* Custom Dropdown Container */
+        .search-container {
+            position: relative;
         }
-        /* The Report Card Style */
-        .report-card {
+
+        #arrow-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--primary-red);
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 100;
+            margin-top: 5px;
+        }
+
+        .dropdown-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #f9f9f9;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #fff5f5;
+            color: var(--primary-red);
+        }
+
+        /* Main Content View */
+        .main-view {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .report {
             background: white;
             width: 100%;
-            max-width: 700px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 750px;
             padding: 40px;
-            display: none; /* Hidden until search */
-            animation: fadeIn 0.3s ease-in-out;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: none;
+            border-top: 6px solid var(--primary-red);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .empty-state {
-            color: #999;
-            text-align: center;
-            margin-top: 100px;
-        }
+
+        .section { margin-bottom: 25px; }
+        .section h4 { color: #888; font-size: 0.8rem; margin: 0 0 5px; text-transform: uppercase; }
+        .section p { margin: 0; font-size: 1.1rem; color: #333; font-weight: 500; }
+
         .badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 5px 12px;
+            border-radius: 5px;
             font-size: 0.8rem;
             font-weight: bold;
             margin-bottom: 20px;
-            text-transform: uppercase;
+            display: inline-block;
         }
-        .juv-badge { background: #e8f5e9; color: #2e7d32; }
-        .adu-badge { background: #ffebee; color: #c62828; }
+        .juv { background: #e8f5e9; color: #2e7d32; }
+        .adu { background: #ffebee; color: #c62828; }
 
-        .law-section {
-            margin-bottom: 25px;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 15px;
-        }
-        .law-section h3 {
-            font-size: 0.8rem;
-            color: #888;
-            margin: 0 0 8px 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .law-section p {
-            font-size: 1.1rem;
-            margin: 0;
-            color: #222;
-            font-weight: 500;
-        }
-
-        @media (max-width: 800px) {
-            .dashboard { flex-direction: column; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); }
-        }
+        .placeholder-text { color: #aaa; text-align: center; margin-top: 100px; }
     </style>
 </head>
 <body>
 
-<header>
-    <h2 style="margin:0;">Legal Analytics Engine</h2>
-</header>
-
-<div class="dashboard">
-    <div class="sidebar">
-        <div class="input-group">
-            <label>ENTER AGE</label>
-            <input type="number" id="age-input" placeholder="e.g. 24">
-        </div>
-
-        <div class="input-group">
-            <label>SEARCH CRIMINAL CASE</label>
-            <input list="crime-options" id="crime-search" placeholder="Type to filter list...">
-            <datalist id="crime-options">
-                <option value="Theft">
-                <option value="Extortion">
-                <option value="Robbery">
-                <option value="Murder">
-                <option value="Kidnapping">
-                <option value="Assault">
-                <option value="Fraud (Cheating)">
-                <option value="Forgery">
-                <option value="Counterfeiting">
-                <option value="Cyber Crime">
-                <option value="Drug Trafficking">
-                <option value="Domestic Violence">
-                <option value="Bribery/Corruption">
-                <option value="Defamation">
-                <option value="Trespass">
-            </datalist>
-        </div>
-        <p style="font-size: 0.75rem; color: #999;">* Select a case from the list to generate the report on the right.</p>
+<div class="sidebar">
+    <h2 style="color:var(--primary-red); margin-top:0;">Law Finder</h2>
+    
+    <div class="input-group">
+        <label>1. ACCUSED AGE</label>
+        <input type="number" id="age-input" placeholder="Enter age...">
     </div>
 
-    <div class="main-content">
-        <div id="empty-msg" class="empty-state">
-            <p>Waiting for selection...<br>Enter an age and choose a criminal case to begin analysis.</p>
+    <div class="input-group">
+        <label>2. CRIMINAL CASE</label>
+        <div class="search-container">
+            <input type="text" id="crime-input" placeholder="Search or select..." autocomplete="off">
+            <span id="arrow-btn">▼</span>
+            <div id="dropdown" class="dropdown-list">
+                </div>
         </div>
+    </div>
+</div>
 
-        <div id="report" class="report-card">
-            <div id="status-badge" class="badge"></div>
-            <h1 id="crime-title" style="margin: 0 0 30px 0; color: var(--primary-red); border-bottom: 3px solid var(--primary-red); display: inline-block;"></h1>
-            
-            <div class="law-section">
-                <h3>Statutory Provision</h3>
-                <p id="law-code"></p>
-            </div>
+<div class="main-view">
+    <div id="placeholder" class="placeholder-text">
+        <h3>Select age and case to view legal analysis.</h3>
+    </div>
 
-            <div class="law-section">
-                <h3>Prescribed Punishment</h3>
-                <p id="law-punishment"></p>
-            </div>
-
-            <div class="law-section">
-                <h3>Financial Liability (Fine)</h3>
-                <p id="law-fine"></p>
-            </div>
-
-            <div class="law-section">
-                <h3>Victim Rights & Compensation</h3>
-                <p id="law-victim"></p>
-            </div>
+    <div id="report-card" class="report">
+        <div id="age-badge" class="badge"></div>
+        <h1 id="res-title" style="margin: 0 0 25px 0;"></h1>
+        
+        <div class="section">
+            <h4>Legal Code</h4>
+            <p id="res-code"></p>
+        </div>
+        <div class="section">
+            <h4>Punishment Details</h4>
+            <p id="res-punish"></p>
+        </div>
+        <div class="section">
+            <h4>Financial Fine</h4>
+            <p id="res-fine"></p>
+        </div>
+        <div class="section">
+            <h4>Victim Compensation</h4>
+            <p id="res-victim"></p>
         </div>
     </div>
 </div>
 
 <script>
 const casesData = {
-    "theft": { code: "Sec 303 BNS (Formerly 378 IPC)", punish: "Up to 3 years imprisonment, fine, or both.", fine: "Varies by value of property.", victims: "Restitution of property." },
-    "extortion": { code: "Sec 308 BNS (Formerly 383 IPC)", punish: "Up to 7 years imprisonment and fine.", fine: "Significant penal fine.", victims: "Recovery of extorted assets." },
-    "robbery": { code: "Sec 309 BNS (Formerly 390 IPC)", punish: "Rigorous imprisonment up to 10 years.", fine: "Hefty fine mandatory.", victims: "Medical care + asset recovery." },
-    "murder": { code: "Sec 103 BNS (Formerly 302 IPC)", punish: "Life imprisonment or Death Penalty.", fine: "Court-ordered compensation.", victims: "State victim compensation scheme." },
-    "kidnapping": { code: "Sec 137 BNS (Formerly 359 IPC)", punish: "Up to 7 years and fine.", fine: "Variable court fine.", victims: "Rehabilitation and counseling." },
-    "assault": { code: "Sec 115 BNS (Formerly 351 IPC)", punish: "Varies (1 - 7 years) based on injury.", fine: "Medical cost coverage.", victims: "Medical reimbursement." },
-    "fraud (cheating)": { code: "Sec 318 BNS (Formerly 420 IPC)", punish: "Up to 7 years imprisonment.", fine: "Proportional to fraud amount.", victims: "Civil damages recovery." },
-    "forgery": { code: "Sec 336 BNS (Formerly 463 IPC)", punish: "Up to 2 years or fine.", fine: "Standard penalty.", victims: "Legal document nullification." },
-    "counterfeiting": { code: "Sec 178 BNS (Formerly 231 IPC)", punish: "7 years up to Life imprisonment.", fine: "Maximum penal fine.", victims: "National security prosecution." },
-    "cyber crime": { code: "IT Act, 2000 (Section 66)", punish: "3 years to Life (Cyber Terrorism).", fine: "High financial penalties.", victims: "IT Cell adjudication." },
-    "drug trafficking": { code: "NDPS Act, 1985", punish: "10-20 years rigorous imprisonment.", fine: "Minimum ₹1,00,000.", victims: "Drug rehabilitation access." },
-    "domestic violence": { code: "DV Act 2005 / BNS Sec 85", punish: "Up to 3 years imprisonment.", fine: "Maintenance/Medical costs.", victims: "Residence & Protection orders." },
-    "bribery/corruption": { code: "P.C. Act, 1988", punish: "3 to 7 years imprisonment.", fine: "Confiscation of property.", victims: "Public accountability." },
-    "defamation": { code: "Sec 356 BNS (Formerly 499 IPC)", punish: "Simple imprisonment (2 yrs) or fine.", fine: "Compensation to aggrieved.", victims: "Right to public apology." },
-    "trespass": { code: "Sec 329 BNS (Formerly 441 IPC)", punish: "Up to 3 months or fine.", fine: "Nominal penalty.", victims: "Property injunctions." }
+    "Theft": { code: "Sec 303 BNS (Formerly 378 IPC)", punish: "Up to 3 years or fine.", fine: "Proportional to value.", victim: "Restitution of property." },
+    "Murder": { code: "Sec 103 BNS (Formerly 302 IPC)", punish: "Life imprisonment or Death Penalty.", fine: "Court discretion.", victim: "Compensation Scheme." },
+    "Assault": { code: "Sec 115 BNS (Formerly 351 IPC)", punish: "1-7 years depending on hurt.", fine: "Medical expense fine.", victim: "Medical reimbursement." },
+    "Cyber Crime": { code: "IT Act 2000, Sec 66", punish: "3 years to Life.", fine: "Up to 5 Lakhs+.", victim: "Damage recovery." },
+    "Drug Trafficking": { code: "NDPS Act, 1985", punish: "10-20 years rigorous jail.", fine: "Min ₹1,00,000.", victim: "Rehab services." },
+    "Domestic Violence": { code: "DV Act 2005", punish: "Up to 3 years jail.", fine: "Maintenance costs.", victim: "Protection orders." },
+    "Fraud": { code: "Sec 318 BNS (Formerly 420 IPC)", punish: "Up to 7 years.", fine: "Based on loss.", victim: "Civil recovery." },
+    "Extortion": { code: "Sec 308 BNS", punish: "Up to 7 years.", fine: "Penal fine.", victim: "Asset recovery." },
+    "Robbery": { code: "Sec 309 BNS", punish: "Up to 10 years.", fine: "Mandatory fine.", victim: "Medical care." },
+    "Kidnapping": { code: "Sec 137 BNS", punish: "Up to 7 years.", fine: "Variable.", victim: "Counseling." },
+    "Forgery": { code: "Sec 336 BNS", punish: "Up to 2 years.", fine: "Standard fine.", victim: "Doc cancellation." },
+    "Counterfeiting": { code: "Sec 178 BNS", punish: "7 years to Life.", fine: "Max penalty.", victim: "Prosecution support." },
+    "Defamation": { code: "Sec 356 BNS", punish: "Up to 2 years.", fine: "Compensation.", victim: "Public apology." },
+    "Trespass": { code: "Sec 329 BNS", punish: "Up to 3 months.", fine: "Nominal.", victim: "Injunction." },
+    "Bribery": { code: "P.C. Act, 1988", punish: "3-7 years.", fine: "Asset confiscation.", victim: "Public interest." }
 };
 
-function generateReport() {
-    const age = parseInt(document.getElementById('age-input').value);
-    const crimeKey = document.getElementById('crime-search').value.toLowerCase().trim();
-    
-    const reportCard = document.getElementById('report');
-    const emptyMsg = document.getElementById('empty-msg');
+const crimeInput = document.getElementById('crime-input');
+const dropdown = document.getElementById('dropdown');
+const arrowBtn = document.getElementById('arrow-btn');
 
-    if (!age || !crimeKey || !casesData[crimeKey]) {
-        reportCard.style.display = 'none';
-        emptyMsg.style.display = 'block';
+// Fill dropdown
+function populateDropdown(filter = "") {
+    dropdown.innerHTML = "";
+    Object.keys(casesData).forEach(crime => {
+        if (crime.toLowerCase().includes(filter.toLowerCase())) {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.innerText = crime;
+            item.onclick = () => selectCrime(crime);
+            dropdown.appendChild(item);
+        }
+    });
+}
+
+function selectCrime(crime) {
+    crimeInput.value = crime;
+    dropdown.style.display = 'none';
+    showAnalysis();
+}
+
+// Toggle dropdown on arrow click
+arrowBtn.onclick = (e) => {
+    e.stopPropagation();
+    const isVisible = dropdown.style.display === 'block';
+    populateDropdown();
+    dropdown.style.display = isVisible ? 'none' : 'block';
+};
+
+// Filter on typing
+crimeInput.oninput = () => {
+    dropdown.style.display = 'block';
+    populateDropdown(crimeInput.value);
+    showAnalysis();
+};
+
+// Hide dropdown when clicking outside
+document.onclick = () => dropdown.style.display = 'none';
+
+function showAnalysis() {
+    const age = parseInt(document.getElementById('age-input').value);
+    const crime = crimeInput.value;
+    const report = document.getElementById('report-card');
+    const placeholder = document.getElementById('placeholder');
+
+    if (!age || !casesData[crime]) {
+        report.style.display = 'none';
+        placeholder.style.display = 'block';
         return;
     }
 
-    const data = casesData[crimeKey];
-    emptyMsg.style.display = 'none';
-    reportCard.style.display = 'block';
+    placeholder.style.display = 'none';
+    report.style.display = 'block';
+    
+    const data = casesData[crime];
+    document.getElementById('res-title').innerText = crime.toUpperCase();
+    document.getElementById('res-code').innerText = data.code;
+    document.getElementById('res-fine').innerText = data.fine;
+    document.getElementById('res-victim').innerText = data.victim;
 
-    // Update Content
-    document.getElementById('crime-title').innerText = crimeKey.toUpperCase();
-    document.getElementById('law-code').innerText = data.code;
-    document.getElementById('law-fine').innerText = data.fine;
-    document.getElementById('law-victim').innerText = data.victims;
-
-    // Age Analysis
-    const badge = document.getElementById('status-badge');
+    const badge = document.getElementById('age-badge');
     if (age < 18) {
-        badge.innerText = `Juvenile (Age ${age})`;
-        badge.className = "badge juv-badge";
-        
-        // 16-18 Heinous Crime Check
-        if (age >= 16 && (crimeKey === 'murder' || crimeKey === 'drug trafficking')) {
-            document.getElementById('law-punishment').innerHTML = "<strong>HEINOUS OFFENSE EXCEPTION:</strong> Due to the gravity of the crime, the Juvenile Justice Board may order the minor (16-18) to be tried as an adult.";
-        } else {
-            document.getElementById('law-punishment').innerText = "Rehabilitation focus. Maximum 3 years in a Special Home under Juvenile Justice Act. No standard prison.";
-        }
+        badge.innerText = "JUVENILE CASE";
+        badge.className = "badge juv";
+        document.getElementById('res-punish').innerText = "Rehabilitation focus. Max 3 years in a Reformatory Home.";
     } else {
-        badge.innerText = `Adult (Age ${age})`;
-        badge.className = "badge adu-badge";
-        document.getElementById('law-punishment').innerText = data.punish;
+        badge.innerText = "ADULT CASE";
+        badge.className = "badge adu";
+        document.getElementById('res-punish').innerText = data.punish;
     }
 }
 
-document.getElementById('age-input').addEventListener('input', generateReport);
-document.getElementById('crime-search').addEventListener('input', generateReport);
+document.getElementById('age-input').oninput = showAnalysis;
+populateDropdown();
 </script>
-
 </body>
 </html>
