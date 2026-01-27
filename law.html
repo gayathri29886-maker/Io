@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criminal Law Analytics</title>
+    <title>Criminal Law Information</title>
     <style>
         :root {
             --primary-red: #8B0000;
@@ -32,9 +32,20 @@
             z-index: 10;
         }
 
+        /* The Requested Title Style */
+        .main-title {
+            color: var(--primary-red);
+            margin: 0 0 20px 0;
+            font-size: 1.8rem;
+            display: inline-block;
+            border-bottom: 4px solid var(--primary-red); /* Red border below title */
+            padding-bottom: 5px;
+        }
+
         .input-group {
             margin-bottom: 25px;
             position: relative;
+            margin-top: 10px;
         }
 
         label {
@@ -140,7 +151,7 @@
 <body>
 
 <div class="sidebar">
-    <h2 style="color:var(--primary-red); margin-top:0;">Law Finder</h2>
+    <h1 class="main-title">Criminal Law Information</h1>
     
     <div class="input-group">
         <label>1. ACCUSED AGE</label>
@@ -156,11 +167,13 @@
                 </div>
         </div>
     </div>
+    
+    <p style="font-size: 0.7rem; color: #999; margin-top: auto;">© 2026 BNS/IPC Legal Analysis Tool</p>
 </div>
 
 <div class="main-view">
     <div id="placeholder" class="placeholder-text">
-        <h3>Select age and case to view legal analysis.</h3>
+        <h3>Please enter age and select a case from the sidebar.</h3>
     </div>
 
     <div id="report-card" class="report">
@@ -188,13 +201,13 @@
 
 <script>
 const casesData = {
-    "Theft": { code: "Sec 303 BNS (Formerly 378 IPC)", punish: "Up to 3 years or fine.", fine: "Proportional to value.", victim: "Restitution of property." },
-    "Murder": { code: "Sec 103 BNS (Formerly 302 IPC)", punish: "Life imprisonment or Death Penalty.", fine: "Court discretion.", victim: "Compensation Scheme." },
-    "Assault": { code: "Sec 115 BNS (Formerly 351 IPC)", punish: "1-7 years depending on hurt.", fine: "Medical expense fine.", victim: "Medical reimbursement." },
-    "Cyber Crime": { code: "IT Act 2000, Sec 66", punish: "3 years to Life.", fine: "Up to 5 Lakhs+.", victim: "Damage recovery." },
-    "Drug Trafficking": { code: "NDPS Act, 1985", punish: "10-20 years rigorous jail.", fine: "Min ₹1,00,000.", victim: "Rehab services." },
-    "Domestic Violence": { code: "DV Act 2005", punish: "Up to 3 years jail.", fine: "Maintenance costs.", victim: "Protection orders." },
-    "Fraud": { code: "Sec 318 BNS (Formerly 420 IPC)", punish: "Up to 7 years.", fine: "Based on loss.", victim: "Civil recovery." },
+    "Theft": { code: "Sec 303 BNS (Old 378 IPC)", punish: "Up to 3 years or fine.", fine: "Proportional to value.", victim: "Restitution of property." },
+    "Murder": { code: "Sec 103 BNS (Old 302 IPC)", punish: "Life imprisonment or Death Penalty.", fine: "Court discretion.", victim: "Victim Compensation Scheme." },
+    "Assault": { code: "Sec 115 BNS (Old 351 IPC)", punish: "1-7 years based on hurt.", fine: "Medical expense fine.", victim: "Medical reimbursement." },
+    "Cyber Crime": { code: "IT Act 2000, Sec 66", punish: "3 years to Life.", fine: "Up to 5 Lakhs+.", victim: "IT Adjudicator damages." },
+    "Drug Trafficking": { code: "NDPS Act, 1985", punish: "10-20 years rigorous jail.", fine: "Min ₹1,00,000.", victim: "State rehab access." },
+    "Domestic Violence": { code: "DV Act 2005 / BNS Sec 85", punish: "Up to 3 years jail.", fine: "Maintenance costs.", victim: "Protection orders." },
+    "Fraud": { code: "Sec 318 BNS (Old 420 IPC)", punish: "Up to 7 years.", fine: "Based on loss.", victim: "Civil recovery." },
     "Extortion": { code: "Sec 308 BNS", punish: "Up to 7 years.", fine: "Penal fine.", victim: "Asset recovery." },
     "Robbery": { code: "Sec 309 BNS", punish: "Up to 10 years.", fine: "Mandatory fine.", victim: "Medical care." },
     "Kidnapping": { code: "Sec 137 BNS", punish: "Up to 7 years.", fine: "Variable.", victim: "Counseling." },
@@ -209,7 +222,6 @@ const crimeInput = document.getElementById('crime-input');
 const dropdown = document.getElementById('dropdown');
 const arrowBtn = document.getElementById('arrow-btn');
 
-// Fill dropdown
 function populateDropdown(filter = "") {
     dropdown.innerHTML = "";
     Object.keys(casesData).forEach(crime => {
@@ -229,7 +241,6 @@ function selectCrime(crime) {
     showAnalysis();
 }
 
-// Toggle dropdown on arrow click
 arrowBtn.onclick = (e) => {
     e.stopPropagation();
     const isVisible = dropdown.style.display === 'block';
@@ -237,14 +248,12 @@ arrowBtn.onclick = (e) => {
     dropdown.style.display = isVisible ? 'none' : 'block';
 };
 
-// Filter on typing
 crimeInput.oninput = () => {
     dropdown.style.display = 'block';
     populateDropdown(crimeInput.value);
     showAnalysis();
 };
 
-// Hide dropdown when clicking outside
 document.onclick = () => dropdown.style.display = 'none';
 
 function showAnalysis() {
@@ -272,7 +281,11 @@ function showAnalysis() {
     if (age < 18) {
         badge.innerText = "JUVENILE CASE";
         badge.className = "badge juv";
-        document.getElementById('res-punish').innerText = "Rehabilitation focus. Max 3 years in a Reformatory Home.";
+        if (age >= 16 && (crime === 'Murder' || crime === 'Drug Trafficking')) {
+             document.getElementById('res-punish').innerHTML = "<strong>HEINOUS OFFENSE:</strong> For ages 16-18, the JJ Board may decide to try the minor as an adult.";
+        } else {
+             document.getElementById('res-punish').innerText = "Rehabilitation focus. Max 3 years in a Reformatory Home.";
+        }
     } else {
         badge.innerText = "ADULT CASE";
         badge.className = "badge adu";
