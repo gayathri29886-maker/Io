@@ -7,6 +7,7 @@
     <style>
         :root {
             --primary-red: #8B0000;
+            --darker-red: #660000;
             --sidebar-bg: #ffffff;
             --main-bg: #f4f6f8;
             --border: #e0e0e0;
@@ -16,7 +17,33 @@
             background-color: var(--main-bg);
             margin: 0;
             display: flex;
+            flex-direction: column; /* Stack header on top of dashboard */
             height: 100vh;
+            overflow: hidden;
+        }
+
+        /* NEW: Top Banner Header like your image */
+        .top-banner {
+            background-color: var(--primary-red);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 20;
+        }
+
+        .top-banner h1 {
+            margin: 0;
+            font-family: 'Brush Script MT', 'Cursive', sans-serif; /* Stylized font */
+            font-size: 3rem;
+            font-weight: normal;
+            letter-spacing: 2px;
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            display: flex;
+            flex: 1; /* Take up remaining height */
             overflow: hidden;
         }
 
@@ -29,23 +56,23 @@
             flex-direction: column;
             padding: 30px;
             box-sizing: border-box;
-            z-index: 10;
         }
 
-        /* The Requested Title Style */
-        .main-title {
+        /* Sidebar Title with Red Underline */
+        .sidebar-title {
             color: var(--primary-red);
-            margin: 0 0 20px 0;
+            margin: 0 0 25px 0;
             font-size: 1.8rem;
+            font-weight: bold;
             display: inline-block;
-            border-bottom: 4px solid var(--primary-red); /* Red border below title */
-            padding-bottom: 5px;
+            border-bottom: 4px solid var(--primary-red);
+            padding-bottom: 8px;
+            line-height: 1.2;
         }
 
         .input-group {
             margin-bottom: 25px;
             position: relative;
-            margin-top: 10px;
         }
 
         label {
@@ -54,7 +81,7 @@
             color: #666;
             margin-bottom: 8px;
             display: block;
-            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         input {
@@ -64,12 +91,11 @@
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
+            outline: none;
         }
 
-        /* Custom Dropdown Container */
-        .search-container {
-            position: relative;
-        }
+        /* Custom Search Dropdown */
+        .search-container { position: relative; }
 
         #arrow-btn {
             position: absolute;
@@ -78,15 +104,11 @@
             transform: translateY(-50%);
             cursor: pointer;
             color: var(--primary-red);
-            font-size: 1.2rem;
-            transition: 0.3s;
         }
 
         .dropdown-list {
             position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
+            top: 100%; left: 0; right: 0;
             background: white;
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -102,15 +124,11 @@
             padding: 12px 15px;
             cursor: pointer;
             border-bottom: 1px solid #f9f9f9;
-            transition: background 0.2s;
         }
 
-        .dropdown-item:hover {
-            background-color: #fff5f5;
-            color: var(--primary-red);
-        }
+        .dropdown-item:hover { background-color: #fff5f5; color: var(--primary-red); }
 
-        /* Main Content View */
+        /* Content Area */
         .main-view {
             flex: 1;
             padding: 40px;
@@ -150,51 +168,56 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <h1 class="main-title">Criminal Law Information</h1>
-    
-    <div class="input-group">
-        <label>1. ACCUSED AGE</label>
-        <input type="number" id="age-input" placeholder="Enter age...">
-    </div>
-
-    <div class="input-group">
-        <label>2. CRIMINAL CASE</label>
-        <div class="search-container">
-            <input type="text" id="crime-input" placeholder="Search or select..." autocomplete="off">
-            <span id="arrow-btn">▼</span>
-            <div id="dropdown" class="dropdown-list">
-                </div>
-        </div>
-    </div>
-    
-    <p style="font-size: 0.7rem; color: #999; margin-top: auto;">© 2026 BNS/IPC Legal Analysis Tool</p>
+<div class="top-banner">
+    <h1>Criminal Law</h1>
 </div>
 
-<div class="main-view">
-    <div id="placeholder" class="placeholder-text">
-        <h3>Please enter age and select a case from the sidebar.</h3>
+<div class="dashboard">
+    <div class="sidebar">
+        <h1 class="sidebar-title">Criminal Law<br>Information</h1>
+        
+        <div class="input-group">
+            <label>1. ACCUSED AGE</label>
+            <input type="number" id="age-input" placeholder="Enter age...">
+        </div>
+
+        <div class="input-group">
+            <label>2. CRIMINAL CASE</label>
+            <div class="search-container">
+                <input type="text" id="crime-input" placeholder="Search or select..." autocomplete="off">
+                <span id="arrow-btn">▼</span>
+                <div id="dropdown" class="dropdown-list"></div>
+            </div>
+        </div>
+        
+        <p style="font-size: 0.7rem; color: #999; margin-top: auto;">© 2026 Legal Resource Tool</p>
     </div>
 
-    <div id="report-card" class="report">
-        <div id="age-badge" class="badge"></div>
-        <h1 id="res-title" style="margin: 0 0 25px 0;"></h1>
-        
-        <div class="section">
-            <h4>Legal Code</h4>
-            <p id="res-code"></p>
+    <div class="main-view">
+        <div id="placeholder" class="placeholder-text">
+            <h3>Please enter age and select a case from the sidebar.</h3>
         </div>
-        <div class="section">
-            <h4>Punishment Details</h4>
-            <p id="res-punish"></p>
-        </div>
-        <div class="section">
-            <h4>Financial Fine</h4>
-            <p id="res-fine"></p>
-        </div>
-        <div class="section">
-            <h4>Victim Compensation</h4>
-            <p id="res-victim"></p>
+
+        <div id="report-card" class="report">
+            <div id="age-badge" class="badge"></div>
+            <h1 id="res-title" style="margin: 0 0 25px 0; color: var(--primary-red);"></h1>
+            
+            <div class="section">
+                <h4>Legal Code</h4>
+                <p id="res-code"></p>
+            </div>
+            <div class="section">
+                <h4>Punishment Details</h4>
+                <p id="res-punish"></p>
+            </div>
+            <div class="section">
+                <h4>Financial Fine</h4>
+                <p id="res-fine"></p>
+            </div>
+            <div class="section">
+                <h4>Victim Compensation</h4>
+                <p id="res-victim"></p>
+            </div>
         </div>
     </div>
 </div>
@@ -202,20 +225,20 @@
 <script>
 const casesData = {
     "Theft": { code: "Sec 303 BNS (Old 378 IPC)", punish: "Up to 3 years or fine.", fine: "Proportional to value.", victim: "Restitution of property." },
-    "Murder": { code: "Sec 103 BNS (Old 302 IPC)", punish: "Life imprisonment or Death Penalty.", fine: "Court discretion.", victim: "Victim Compensation Scheme." },
-    "Assault": { code: "Sec 115 BNS (Old 351 IPC)", punish: "1-7 years based on hurt.", fine: "Medical expense fine.", victim: "Medical reimbursement." },
-    "Cyber Crime": { code: "IT Act 2000, Sec 66", punish: "3 years to Life.", fine: "Up to 5 Lakhs+.", victim: "IT Adjudicator damages." },
-    "Drug Trafficking": { code: "NDPS Act, 1985", punish: "10-20 years rigorous jail.", fine: "Min ₹1,00,000.", victim: "State rehab access." },
-    "Domestic Violence": { code: "DV Act 2005 / BNS Sec 85", punish: "Up to 3 years jail.", fine: "Maintenance costs.", victim: "Protection orders." },
-    "Fraud": { code: "Sec 318 BNS (Old 420 IPC)", punish: "Up to 7 years.", fine: "Based on loss.", victim: "Civil recovery." },
+    "Murder": { code: "Sec 103 BNS (Old 302 IPC)", punish: "Life imprisonment or Death.", fine: "Court discretion.", victim: "Compensation Scheme." },
+    "Assault": { code: "Sec 115 BNS (Old 351 IPC)", punish: "1-7 years depending on hurt.", fine: "Medical fine.", victim: "Reimbursement." },
+    "Cyber Crime": { code: "IT Act 2000", punish: "3 years to Life.", fine: "Hefty penalty.", victim: "Damages recovery." },
+    "Drug Trafficking": { code: "NDPS Act, 1985", punish: "10-20 years rigorous jail.", fine: "Min ₹1 Lakh.", victim: "State rehab." },
+    "Domestic Violence": { code: "DV Act 2005", punish: "Up to 3 years jail.", fine: "Maintenance costs.", victim: "Protection orders." },
+    "Fraud": { code: "Sec 318 BNS", punish: "Up to 7 years.", fine: "Based on loss.", victim: "Civil recovery." },
     "Extortion": { code: "Sec 308 BNS", punish: "Up to 7 years.", fine: "Penal fine.", victim: "Asset recovery." },
     "Robbery": { code: "Sec 309 BNS", punish: "Up to 10 years.", fine: "Mandatory fine.", victim: "Medical care." },
     "Kidnapping": { code: "Sec 137 BNS", punish: "Up to 7 years.", fine: "Variable.", victim: "Counseling." },
     "Forgery": { code: "Sec 336 BNS", punish: "Up to 2 years.", fine: "Standard fine.", victim: "Doc cancellation." },
-    "Counterfeiting": { code: "Sec 178 BNS", punish: "7 years to Life.", fine: "Max penalty.", victim: "Prosecution support." },
+    "Counterfeiting": { code: "Sec 178 BNS", punish: "7 years to Life.", fine: "Max penalty.", victim: "Prosecution." },
     "Defamation": { code: "Sec 356 BNS", punish: "Up to 2 years.", fine: "Compensation.", victim: "Public apology." },
-    "Trespass": { code: "Sec 329 BNS", punish: "Up to 3 months.", fine: "Nominal.", victim: "Injunction." },
-    "Bribery": { code: "P.C. Act, 1988", punish: "3-7 years.", fine: "Asset confiscation.", victim: "Public interest." }
+    "Trespass": { code: "Sec 329 BNS", punish: "Up to 3 months.", fine: "Nominal.", victim: "Injunctions." },
+    "Bribery": { code: "P.C. Act, 1988", punish: "3-7 years.", fine: "Asset seizure.", victim: "Public interest." }
 };
 
 const crimeInput = document.getElementById('crime-input');
@@ -251,7 +274,6 @@ arrowBtn.onclick = (e) => {
 crimeInput.oninput = () => {
     dropdown.style.display = 'block';
     populateDropdown(crimeInput.value);
-    showAnalysis();
 };
 
 document.onclick = () => dropdown.style.display = 'none';
@@ -281,11 +303,7 @@ function showAnalysis() {
     if (age < 18) {
         badge.innerText = "JUVENILE CASE";
         badge.className = "badge juv";
-        if (age >= 16 && (crime === 'Murder' || crime === 'Drug Trafficking')) {
-             document.getElementById('res-punish').innerHTML = "<strong>HEINOUS OFFENSE:</strong> For ages 16-18, the JJ Board may decide to try the minor as an adult.";
-        } else {
-             document.getElementById('res-punish').innerText = "Rehabilitation focus. Max 3 years in a Reformatory Home.";
-        }
+        document.getElementById('res-punish').innerText = "Rehabilitation focus. Max 3 years in a Reformatory Home.";
     } else {
         badge.innerText = "ADULT CASE";
         badge.className = "badge adu";
